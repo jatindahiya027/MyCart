@@ -1,0 +1,207 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Header styles */
+.header {
+  position: fixed; /* Change from relative to fixed */
+  top: 0; /* Fix it to the top of the viewport */
+  left: 0; /* Align it to the left */
+  right: 0; /* Align it to the right */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-color: white; /* Optional: Add background color */
+  z-index: 1000; /* Ensure it stays above other content */
+}
+
+
+.logo {
+  position: absolute;
+  left: 20px; /* Aligns logo to the leftmost corner */
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  font-weight: 600;
+  color: #505050;
+}
+
+.image {
+  margin: 5px;
+}
+
+.search-container {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center; /* Centers the search bar */
+  
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #F9F8F8;
+  border-radius: 10px;
+  /* width: 600px; */
+  /* padding: 10px; */
+}
+
+.search-bar input {
+  background-color: #F9F8F8;
+  border-radius: 10px;
+  padding: 10px;
+  width: 400px;
+  border: none; /* Removes any default border */
+  outline: none;
+}
+.info{
+  /* position: relative; */
+  display: flex;
+  flex-direction: row;
+  padding: 5px;
+  align-items: center;
+  justify-content: space-between;
+  color: #6F6E6E;
+  
+}
+.font-we{
+  font-weight: 700;
+}
+.info-div{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.item-color{
+  background-color: #F9F8F8;
+  padding: 5px;
+  border-radius: 5px;
+}
+.margin{
+  margin-right: 10px;
+}
+.marginl{
+  margin-left: 10px;
+}
+.padd{
+  padding: 10px;
+}
+.length{
+  max-width:100vw;
+  border: none; /* Removes any default border */
+  outline: none;
+}
+/* Item List */
+.item-list {
+  margin-top: 50px; /* Adjust this value based on the total height of your header */
+  /* overflow-y: auto;  */
+  /* flex: 1; */
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 98vw;
+}
+
+/* Item Card styles */
+.item-card {
+  position: relative;
+  display: flex;
+  /* align-items: center; */
+  justify-content: space-between;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  background-color: #F9F8F8;
+  width: 97vw;
+  min-height: 130px;
+}
+
+.item-image img {
+  border-radius: 10px;
+}
+
+.item-info {
+  flex-grow: 1;
+  padding: 0 20px;
+  line-height: 25px;
+}
+.brand {
+  margin-top: 10px;
+  font-weight: 100;
+  font-size: 12px;
+  /* Reset bottom margin if needed */
+}
+.item-name{
+  width: 30em;
+  height: 30px;
+  white-space: nowrap;
+  overflow: hidden;
+  white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    color: #505050;
+  font-weight: 700;
+}
+
+
+.item-info h2 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.price-range {
+  color: red;
+  font-size: 14px;
+  position: absolute;
+  bottom: 10px;
+  
+
+}
+.high-price{
+  margin-right: 15px;
+}
+.low-price{
+  color: #28A745;
+}
+
+.discount {
+  position: absolute; /* Child positioned absolutely */
+  bottom: 10%; /* Move to 50% from top */
+  right: 20%; /* Move to 50% from left */
+  /* transform: translate(-50%, -50%); */
+  font-size: 32px;
+  color: red;
+}
+
+.current-price {
+  font-size: 40px;
+  color: #0241E2;
+  position: absolute;
+  bottom: 20px;
+  right: 10px;
+  font-weight: 700;
+}
+.fixsize{
+  max-height: 140px;
+  object-fit: cover;
+}
+.item-footer {
+  color: #969696;
+  font-weight: 700;
+  font-size: 12px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
