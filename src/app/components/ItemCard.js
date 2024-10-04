@@ -9,22 +9,22 @@ const ItemCard = ({ item }) => {
       </div>
       <div className="item-info">
         
-        <p className="brand">{item.brand}</p>
+        <p className="brand">{item.website}</p>
         
         <a href={item.link}>
         <h2  className="item-name">{item.name}</h2>
         </a>
         <p className="price-range">
-          <span className="high-price">High: ₹{item.highPrice}</span> 
-          <span className="low-price">Low: ₹{item.lowPrice}</span>
+          <span className="high-price">High: ₹{item.max_price}</span> 
+          <span className="low-price">Low: ₹{item.min_price}</span>
         </p>
         <p className="discount">
           {/* {item.discountPercentage}% / ₹{item.discountedPrice} */}
         </p>
-        <p className="current-price">₹{item.currentPrice}</p>
+        <p className="current-price">₹{item.current_price}</p>
       </div>
       <div className="item-footer">
-        <p>{item.dateAdded}</p>
+        <p>{item.current_price_date}</p>
         <button className="delete-btn">🗑️</button>
       </div>
     </div>
