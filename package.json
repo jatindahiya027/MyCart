@@ -5,17 +5,23 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start --port 3027",
     "lint": "next lint"
   },
   "dependencies": {
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.451.0",
     "next": "14.2.5",
     "node-cron": "^3.0.3",
     "react": "^18",
     "react-dom": "^18",
+    "recharts": "^2.13.0",
     "sharp": "^0.33.4",
     "sqlite": "^5.1.1",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "tailwind-merge": "^2.5.3",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "eslint": "^8",

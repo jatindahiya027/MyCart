@@ -29,13 +29,26 @@ product_data = {}
 # Example to fetch product details (adapt the selectors based on the site's HTML)
 try:
     product_name = driver.find_element(By.CSS_SELECTOR, 'h1.product-detail-info__header-name').text
-    product_price = driver.find_elements(By.CSS_SELECTOR, 'span.money-amount__main')[-1].text
+    product_prices = driver.find_elements(By.CSS_SELECTOR, 'span.money-amount__main')
+    product_price='0'
+    i=0
+    try:
+        discount = driver.find_element(By.CSS_SELECTOR, 'span.price-current__discount-percentage').text
+        for price in product_prices:
+            if(price.text!=''):
+                product_price=price.text
+                if(i>0):
+                    break
+                i=i+1
+    except Exception as e:
+        for price in product_prices:
+            if(price.text!=''):
+                product_price=price.text
+                break
+               
     driver.implicitly_wait(10)
     product_image_url = driver.find_element(By.CLASS_NAME, 'media-image__image.media__wrapper--media').get_attribute('src')
 
-    # print(f"Product Name: {product_name}")
-    # print(f"Product Price: {product_price[-1].text}")
-    # print(f"Product Image URL: {product_image_url}")
     product_data['product_name'] = product_name.strip()
     product_data['product_price'] = float(re.sub(r'[^\d.]', '', product_price.strip())) if '.' in product_price.strip() else int(re.sub(r'[^\d]', '', product_price.strip()))
     product_data['product_image_url'] = product_image_url.strip()

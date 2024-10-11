@@ -1,8 +1,6 @@
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-# Set up your WebDriver (ChromeDriver in PATH)
+from selenium.webdriver.chrome.service import Service as ChromeService
+
 import json
 import sys
 import re
@@ -17,42 +15,38 @@ else:
     sys.exit(1)
 # Reconfigure stdout to use UTF-8 encoding
 sys.stdout.reconfigure(encoding='utf-8')
+# Set up Chrome options for headless mode
 chrome_options = webdriver.ChromeOptions()
-# chrome_options.add_argument("--headless")
 
+# chrome_options.add_argument("--headless=old")
 
+# Initialize the WebDriver
 driver = webdriver.Chrome(options=chrome_options)
+# Initialize the WebDriver
+# driver = webdriver.Chrome(options=chrome_options)
 
 # Open the webpage
-driver.get(url)
-product_data = {}
 
-# Example to fetch product details (adapt the selectors based on the site's HTML)
 try:
- 
+    # Navigate to the URL
+    # url = "https://www.adidas.co.in/api/products/EG4959"
+    driver.get(url)
+
+    # Locate the <pre> tag
+    pre_tag = driver.find_element("tag name", "pre")
     
-    product_name = driver.find_elements(By.CSS_SELECTOR, 'h1[data-testid="product-title"]')[-1].text
-
-    # Get product price
-    product_price = driver.find_elements(By.CSS_SELECTOR, 'div.gl-price-item.notranslate')[-1].text
+    # Extract the text from the <pre> tag
+    json_data = pre_tag.text
     
-    # Get image URL
-    driver.implicitly_wait(20)
-    product_image_url = driver.find_element(By.CSS_SELECTOR, 'picture[data-testid="pdp-gallery-picture"] img').get_attribute('src')
+    # Convert the string to a JSON object
+    json_object = json.loads(json_data)
 
-    # Output the details
-    # print(product_name_element)
-    # print(f"Product Name: {product_name}")
-    # print(f"Product Price: {product_price}")
-    # print(f"Product Image URL: {product_image_url}")
-    product_data['product_name'] = product_name.strip()
-    product_data['product_price'] = number = float(re.sub(r'[^\d.]', '', product_price.strip())) if '.' in product_price.strip() else int(re.sub(r'[^\d]', '', product_price.strip()))
-
-    product_data['product_image_url'] = product_image_url.strip()
+    # Print the JSON object
+    print(json.dumps(json_object, indent=4))  # Pretty print the JSON
 
 except Exception as e:
     print(f"An error occurred: {e}")
 
-# Close the driver
-# driver.quit()
-print(json.dumps(product_data, ensure_ascii=False, indent=4))
+finally:
+    # Close the driver
+    driver.quit()

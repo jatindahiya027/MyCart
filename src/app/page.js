@@ -96,9 +96,25 @@ export default function Home() {
   //   },
   // ]);
   const [itemdata, setitemdata] = useState([]);
+  const [isVisible, setIsVisible] = useState(true);
+  const [inputValue, setInputValue] = useState('');
+  const [selectedOption, setSelectedOption] = useState('Relevance');
+
+  const handleChange = (event) => {
+    setSelectedOption(event.target.value);
+    // You can also handle sorting logic here based on selected value
+  };
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      toggleVisibility();
+      console.log('Enter key pressed!');
+      // Call your function here
+      enterdata();
+    }
+  };
 function enterdata (){
   const scrapeData = async () => {
-    const link = "https://www.zara.com/in/en/skinny-fit-jeans-p05585449.html?v1=364113127&v2=2436823";
+    const link = inputValue;
     await fetch('/api/scrape',{method: "POST",
       body: JSON.stringify({link }),
     }).then((res) => res.json())
@@ -112,7 +128,7 @@ function enterdata (){
 }
 
 const fetchdata = async()=>{
-  await fetch('/api/data',{method:'POST'})
+  await fetch('/api/data',{method:'POST',body: JSON.stringify({selectedOption}),})
   .then((res) => res.json())
   .then((data) => setitemdata(data))
   .catch((error) => {
@@ -131,18 +147,24 @@ const fetchupdateddata = async()=>{
 useEffect(() => {
   fetchdata();
   return () => {
-    console.log("got the data");
+    // console.log("got the data");
   };
   
-},[]);
+},[selectedOption]);
+const toggleVisibility = () => {
+  setIsVisible(!isVisible); // Toggle visibility
+  setInputValue(null);
+};
 // console.log(itemdata);
   return (
+    
     <div className="container">
-      <Header />
+    <Header />
+    {isVisible ?  <>
       <div className="item-list">
         <div className="info">
           <div className="info-div">
-            <p className="margin font-we">5 items found</p>
+            <p className="margin font-we">{itemdata.length} items found</p>
             <button className="item-color margin" onClick={fetchupdateddata}><Image
                alt='reload'
                 src="/reload.png"
@@ -152,14 +174,15 @@ useEffect(() => {
           </div>
           <div className="info-div">
             <p className="margin font-we">Sort By</p>
-            <select className="item-color margin length">
-              <option value="someOption">Relevance</option>
-              <option value="otherOption">Price (Highest first)</option>
-              <option value="otherOption">Price (Lowest first)</option>
-              <option value="otherOption">Date (Highest first)</option>
-              <option value="otherOption">Date (Lowest first)</option>
+            <select className="item-color margin length" value={selectedOption}
+      onChange={handleChange}>
+              <option value="Relevance">Relevance</option>
+              <option value="Price (Highest first)">Price (Highest first)</option>
+              <option value="Price (Lowest first)">Price (Lowest first)</option>
+              <option value="Date (Highest first)">Date (Highest first)</option>
+              <option value="Date (Lowest first)">Date (Lowest first)</option>
             </select>
-            <button className="item-color info-div font-we " onClick={enterdata}>
+            <button className="item-color info-div font-we " onClick={toggleVisibility}>
               Add{" "}
               <Image
                 alt="+"
@@ -172,9 +195,21 @@ useEffect(() => {
           </div>
         </div>
         {itemdata.map((itemdata, index) => (
-          <ItemCard key={index} item={itemdata} />
+          <ItemCard key={itemdata.transid} item={itemdata} setitemdata={setitemdata} selectedOption={selectedOption}/>
         ))}
-      </div>
+      </div></>:<div className='insertdata'>
+      <button onClick={toggleVisibility}><Image
+      alt='cross'
+      src='/close.png'
+      width='40'
+      height='40'
+      /></button>
+      <input type="text" value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        onKeyDown={handleKeyDown}
+         placeholder="Enter URL"  />
+      
+      </div>}
     </div>
   );
 }
