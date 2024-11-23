@@ -1,8 +1,18 @@
 import { exec } from "child_process";
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
+import Redis from "ioredis";
 
+// Set up Redis connection
+const redis = new Redis({
+  host: "localhost",
+  port: 6379,
+});
 let db = null;
+async function storeDataInRedis(key, value) {
+  await redis.set(key, JSON.stringify(value), "EX", 60 * 60); // Cache data for 5 minutes
+  console.log("Data stored in Redis");
+}
 async function ajio(url) {
   const extractedPart = url.split("/").slice(-2).join("/");
   // console.log(extractedPart);
@@ -183,7 +193,7 @@ export async function POST(request) {
   let run = null;
   let data = null;
   if (domain === "amazon") {
-    run = `python amazon.py ${url.link}`;
+    run = `python amazon.py "${url.link}"`;
   } else if (domain === "zara") {
     data = await zara(url.link);
     data = JSON.parse(data);
@@ -220,9 +230,11 @@ export async function POST(request) {
     const currentTime = now.toLocaleString();
 
     if (run != null) {
+      console.log(run);
       const { stdout, stderr } = await execPromise(run);
 
       // Parse the JSON string returned from python
+      console.log(stdout);
       data = JSON.parse(stdout.trim());
     }
     console.log(
@@ -269,10 +281,10 @@ export async function POST(request) {
     ]);
 
     const str =
-      "SELECT d.transid, d.website, d.name, d.image, d.link, MIN(dp.price) AS min_price, MAX(dp.price) AS max_price, current_price_info.price AS current_price, current_price_info.date AS current_price_date FROM data d LEFT JOIN dataprice dp ON d.transid = dp.dataid LEFT JOIN ( SELECT dataid, price, date FROM dataprice WHERE (dataid, date) IN ( SELECT dataid, MAX(date) FROM dataprice GROUP BY dataid ) ) AS current_price_info ON d.transid = current_price_info.dataid GROUP BY d.transid, d.website, d.name, d.image, d.link;";
+      "SELECT d.transid, d.website, d.name, d.image, d.link, MIN(dp.price) AS min_price, MAX(dp.price) AS max_price, latest_price_info.price AS current_price, latest_price_info.date AS current_price_date FROM data d LEFT JOIN dataprice dp ON d.transid = dp.dataid LEFT JOIN ( SELECT dataid, price, date FROM dataprice WHERE ROWID IN (SELECT MAX(ROWID) FROM dataprice GROUP BY dataid) ) AS latest_price_info ON d.transid = latest_price_info.dataid GROUP BY d.transid, d.website, d.name, d.image, d.link ORDER BY d.transid DESC;";
 
     const items = await db.all(str);
-
+    await storeDataInRedis(str, items);
     // Send your custom response
     return new Response(JSON.stringify(items), {
       headers: { "Content-Type": "application/json" },

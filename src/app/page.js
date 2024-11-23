@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Header from "./components/Header";
 import ItemCard from "./components/ItemCard";
+import { AnimatePresence, motion } from "motion/react";
 export default function Home() {
   // const [items] = useState([
   //   {
@@ -97,119 +98,169 @@ export default function Home() {
   // ]);
   const [itemdata, setitemdata] = useState([]);
   const [isVisible, setIsVisible] = useState(true);
-  const [inputValue, setInputValue] = useState('');
-  const [selectedOption, setSelectedOption] = useState('Relevance');
+  const [inputValue, setInputValue] = useState("");
+  const [selectedOption, setSelectedOption] = useState("Relevance");
 
   const handleChange = (event) => {
     setSelectedOption(event.target.value);
     // You can also handle sorting logic here based on selected value
   };
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       toggleVisibility();
-      console.log('Enter key pressed!');
+      console.log("Enter key pressed!");
       // Call your function here
       enterdata();
     }
   };
-function enterdata (){
-  const scrapeData = async () => {
-    const link = inputValue;
-    await fetch('/api/scrape',{method: "POST",
-      body: JSON.stringify({link }),
-    }).then((res) => res.json())
-    .then((data) => setitemdata(data))
-    .catch((error) => {
-      console.error(`Error fetching data from db:`, error);
-    });
+  function enterdata() {
+    const scrapeData = async () => {
+      const link = inputValue;
+      await fetch("/api/scrape", {
+        method: "POST",
+        body: JSON.stringify({ link }),
+      })
+        .then((res) => res.json())
+        .then((data) => setitemdata(data))
+        .catch((error) => {
+          console.error(`Error fetching data from db:`, error);
+        });
+    };
+
+    scrapeData();
+  }
+
+  const fetchdata = async () => {
+    await fetch("/api/data", {
+      method: "POST",
+      body: JSON.stringify({ selectedOption }),
+    })
+      .then((res) => res.json())
+      .then((data) => setitemdata(data))
+      .catch((error) => {
+        console.error(`Error fetching data from db:`, error);
+      });
   };
 
-  scrapeData();
-}
-
-const fetchdata = async()=>{
-  await fetch('/api/data',{method:'POST',body: JSON.stringify({selectedOption}),})
-  .then((res) => res.json())
-  .then((data) => setitemdata(data))
-  .catch((error) => {
-    console.error(`Error fetching data from db:`, error);
-  });    
-}
-
-const fetchupdateddata = async()=>{
-  await fetch('/api/updatedata',{method:'POST'})
-  .then((res) => res.json())
-  .then((data) => setitemdata(data))
-  .catch((error) => {
-    console.error(`Error fetching data from db:`, error);
-  });    
-}
-useEffect(() => {
-  fetchdata();
-  return () => {
-    // console.log("got the data");
+  const fetchupdateddata = async () => {
+    await fetch("/api/updatedata", { method: "POST" })
+      .then((res) => res.json())
+      .then((data) => setitemdata(data))
+      .catch((error) => {
+        console.error(`Error fetching data from db:`, error);
+      });
   };
-  
-},[selectedOption]);
-const toggleVisibility = () => {
-  setIsVisible(!isVisible); // Toggle visibility
-  setInputValue(null);
-};
-// console.log(itemdata);
+  useEffect(() => {
+    fetchdata();
+    return () => {
+      // console.log("got the data");
+    };
+  }, [selectedOption]);
+  const toggleVisibility = () => {
+    setIsVisible(!isVisible); // Toggle visibility
+    setInputValue(null);
+  };
+  // console.log(itemdata);
   return (
-    
     <div className="container">
-    <Header />
-    {isVisible ?  <>
-      <div className="item-list">
-        <div className="info">
-          <div className="info-div">
-            <p className="margin font-we">{itemdata.length} items found</p>
-            <button className="item-color margin" onClick={fetchupdateddata}><Image
-               alt='reload'
-                src="/reload.png"
-                height={15}
-                width={15}
-              /></button>
+      <Header />
+      {isVisible ? (
+        <>
+          <div className="item-list">
+            <div className="info">
+              <div className="info-div">
+                <p className="margin font-we">{itemdata.length} items found</p>
+                <button
+                  className="item-color margin"
+                  onClick={fetchupdateddata}
+                >
+                  <Image
+                    alt="reload"
+                    src="/reload.png"
+                    height={15}
+                    width={15}
+                  />
+                </button>
+              </div>
+              <div className="info-div">
+                <p className="margin font-we">Sort By</p>
+                <select
+                  className="item-color margin length"
+                  value={selectedOption}
+                  onChange={handleChange}
+                >
+                  <option value="Relevance">Relevance</option>
+                  <option value="Price (Highest first)">
+                    Price (Highest first)
+                  </option>
+                  <option value="Price (Lowest first)">
+                    Price (Lowest first)
+                  </option>
+                  <option value="Date (Highest first)">
+                    Date (Highest first)
+                  </option>
+                  <option value="Date (Lowest first)">
+                    Date (Lowest first)
+                  </option>
+                </select>
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  className="item-color info-div font-we "
+                  onClick={toggleVisibility}
+                >
+                  Add{" "}
+                  <Image
+                    alt="+"
+                    className="marginl"
+                    src="/add.png"
+                    height={15}
+                    width={15}
+                  />
+                </motion.button>
+              </div>
+            </div>
+            {itemdata.map((itemdata, index) => (
+              <AnimatePresence key={itemdata.transid}>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <ItemCard
+                    key={itemdata.transid}
+                    item={itemdata}
+                    setitemdata={setitemdata}
+                    selectedOption={selectedOption}
+                  />
+                </motion.div>
+              </AnimatePresence>
+            ))}
           </div>
-          <div className="info-div">
-            <p className="margin font-we">Sort By</p>
-            <select className="item-color margin length" value={selectedOption}
-      onChange={handleChange}>
-              <option value="Relevance">Relevance</option>
-              <option value="Price (Highest first)">Price (Highest first)</option>
-              <option value="Price (Lowest first)">Price (Lowest first)</option>
-              <option value="Date (Highest first)">Date (Highest first)</option>
-              <option value="Date (Lowest first)">Date (Lowest first)</option>
-            </select>
-            <button className="item-color info-div font-we " onClick={toggleVisibility}>
-              Add{" "}
-              <Image
-                alt="+"
-                className="marginl"
-                src="/add.png"
-                height={15}
-                width={15}
-              />
-            </button>
+        </>
+      ) : (
+        <div className="insertdata">
+          <div>
+            <input
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Enter URL"
+            />
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              transition={{ type: "spring", stiffness: 200, damping: 10 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={toggleVisibility}
+            >
+              <Image alt="cross" src="/close.png" width="20" height="20" />
+            </motion.button>
           </div>
         </div>
-        {itemdata.map((itemdata, index) => (
-          <ItemCard key={itemdata.transid} item={itemdata} setitemdata={setitemdata} selectedOption={selectedOption}/>
-        ))}
-      </div></>:<div className='insertdata'>
-      <button onClick={toggleVisibility}><Image
-      alt='cross'
-      src='/close.png'
-      width='40'
-      height='40'
-      /></button>
-      <input type="text" value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        onKeyDown={handleKeyDown}
-         placeholder="Enter URL"  />
-      
-      </div>}
+      )}
     </div>
   );
 }

@@ -1,9 +1,21 @@
 var cron = require("node-cron");
 import sqlite3 from "sqlite3";
+import nodemailer from 'nodemailer';
 import { open } from "sqlite";
 import { exec } from "child_process";
+import Redis from 'ioredis';
+
+// Set up Redis connection
+const redis = new Redis({
+  host: 'localhost',
+  port: 6379,
+});
 let db = null;
 let data = null;
+async function storeDataInRedis(key, value) {
+  await redis.set(key, JSON.stringify(value), 'EX', 60 * 60 ); // Cache data for 5 minutes
+  console.log('Data stored in Redis');
+}
 async function ajio(url) {
   const extractedPart = url.split("/").slice(-2).join("/");
   // console.log(extractedPart);
@@ -192,9 +204,7 @@ function execPromise(command) {
 cron.schedule("0 */2 * * *", () => {
   updatedata();
 });
-// cron.schedule('* * * * *', () => {
-//   updatedata();
-// });
+
 console.log("Cron job initialized");
 
 async function updatedata() {
@@ -285,5 +295,78 @@ async function updatedata() {
     } catch (error) {
       console.log("error occured ", error);
     }
+  }
+
+  const str2 = 'SELECT d.transid, d.website, d.name, d.image, d.link, MIN(dp.price) AS min_price, MAX(dp.price) AS max_price, latest_price_info.price AS current_price, latest_price_info.date AS current_price_date FROM data d LEFT JOIN dataprice dp ON d.transid = dp.dataid LEFT JOIN ( SELECT dataid, price, date FROM dataprice WHERE ROWID IN (SELECT MAX(ROWID) FROM dataprice GROUP BY dataid) ) AS latest_price_info ON d.transid = latest_price_info.dataid GROUP BY d.transid, d.website, d.name, d.image, d.link ORDER BY d.transid DESC;';
+  const items2 = await db.all(str2);
+  await storeDataInRedis(str2, items2);
+  let products = [];
+  for(let x in items2){
+    if(items2[x].current_price <= items2[x].min_price && items2[x].max_price != items2[x].min_price){
+      let newObject = {  name: items2[x].name , price: items2[x].current_price, imageUrl: items2[x].image, link: items2[x].link };
+      products.push(newObject);
+    }
+  }
+
+  if(products.length != 0){
+
+    const emailBody = `
+    <html>
+      <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+        <h1 style="text-align: center; color: #007BFF;">Product's List</h1>
+        <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+          <thead>
+            <tr>
+              <th style="text-align: left; border-bottom: 2px solid #ddd; padding: 8px;">Image</th>
+              <th style="text-align: left; border-bottom: 2px solid #ddd; padding: 8px;">Name</th>
+              <th style="text-align: left; border-bottom: 2px solid #ddd; padding: 8px;">Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${products
+              .map(
+                (product) => `
+                  <tr>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd;"><a href="${product.link}">
+                      <img src="${product.imageUrl}" alt="${product.name}" style="width: 70px; height: auto; border-radius: 5px;" /></a>
+                    </td>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd;"><a href="${product.link}">${product.name}</a></td>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd;">${product.price}</td>
+                  </tr>
+                `
+              )
+              .join('')}
+          </tbody>
+        </table>
+      </body>
+    </html>
+  `;
+  try {
+    // Create a transporter using your email service credentials
+    const transporter = nodemailer.createTransport({
+      service: 'gmail', // Or any other email service like Yahoo, Outlook, etc.
+      auth: {
+        user: process.env.EMAIL_USER, // Your email address
+        pass: process.env.EMAIL_PASS, // Your email password or app-specific password
+      },
+    });
+ //    console.log(process.env.EMAIL_PASS+"*********************");
+    // Define the email options
+    const mailOptions = {
+      from: process.env.EMAIL_USER, // Sender address
+      to: 'jatindahiya027@gmail.com', // Replace with recipient email
+      subject: 'Price Drop Alert from MyCart!', // Email subject
+      html: emailBody, // Plain text content
+    };
+ 
+    // Send the email
+    await transporter.sendMail(mailOptions);
+ 
+    // Respond with success
+    
+  } catch (error) {
+    console.error('Error sending email:', error);
+    
+  }
   }
 }

@@ -1,7 +1,18 @@
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
 import { exec } from "child_process";
+import Redis from "ioredis";
+
+// Set up Redis connection
+const redis = new Redis({
+  host: "localhost",
+  port: 6379,
+});
 let db = null;
+async function storeDataInRedis(key, value) {
+  await redis.set(key, JSON.stringify(value), "EX", 60 * 60); // Cache data for 5 minutes
+  console.log("Data stored in Redis");
+}
 async function ajio(url) {
   const extractedPart = url.split("/").slice(-2).join("/");
   // console.log(extractedPart);
@@ -207,7 +218,7 @@ export async function POST(request) {
 
     let data = null;
     if (domain === "amazon") {
-      run = `python amazon.py ${items[x].link}`;
+      run = `python amazon.py "${items[x].link}"`;
     } else if (domain === "zara") {
       data = await zara(items[x].link);
       data = JSON.parse(data);
@@ -229,7 +240,9 @@ export async function POST(request) {
       // run = `python adidas.py "${url.link}"`;
       const extractedPart = items[x].link.split("/").pop().replace(".html", "");
       const link = "https://www.adidas.co.in/api/products/" + extractedPart;
-      const { stdout, stderr } = await execPromise(`python adidas.py "${link}"`);
+      const { stdout, stderr } = await execPromise(
+        `python adidas.py "${link}"`
+      );
       data = JSON.parse(stdout.trim());
       data = {
         product_name: data.name,
@@ -239,14 +252,14 @@ export async function POST(request) {
     }
     try {
       const now = new Date();
-    const currentTime = now.toLocaleString();
+      const currentTime = now.toLocaleString();
 
-    if (run != null) {
-      const { stdout, stderr } = await execPromise(run);
+      if (run != null) {
+        const { stdout, stderr } = await execPromise(run);
 
-      // Parse the JSON string returned from python
-      data = JSON.parse(stdout.trim());
-    }
+        // Parse the JSON string returned from python
+        data = JSON.parse(stdout.trim());
+      }
       const strrr = `
     INSERT INTO dataprice (dataid,date, price) VALUES
      (?,?,?)
@@ -260,15 +273,15 @@ export async function POST(request) {
       console.log("error occured ", error);
     }
   }
-  
-  const strr = 'SELECT d.transid, d.website, d.name, d.image, d.link, MIN(dp.price) AS min_price, MAX(dp.price) AS max_price, current_price_info.price AS current_price, current_price_info.date AS current_price_date FROM data d LEFT JOIN dataprice dp ON d.transid = dp.dataid LEFT JOIN ( SELECT dataid, price, date FROM dataprice WHERE (dataid, date) IN ( SELECT dataid, MAX(date) FROM dataprice GROUP BY dataid ) ) AS current_price_info ON d.transid = current_price_info.dataid GROUP BY d.transid, d.website, d.name, d.image, d.link;';
-    
-    
-      const itemss = await db.all(strr);
-    
-    // Send your custom response
-    return new Response(JSON.stringify(itemss), {
-        headers: { "Content-Type": "application/json" },
-        status: 200,
-      });
+
+  const strr =
+    "SELECT d.transid, d.website, d.name, d.image, d.link, MIN(dp.price) AS min_price, MAX(dp.price) AS max_price, latest_price_info.price AS current_price, latest_price_info.date AS current_price_date FROM data d LEFT JOIN dataprice dp ON d.transid = dp.dataid LEFT JOIN ( SELECT dataid, price, date FROM dataprice WHERE ROWID IN (SELECT MAX(ROWID) FROM dataprice GROUP BY dataid) ) AS latest_price_info ON d.transid = latest_price_info.dataid GROUP BY d.transid, d.website, d.name, d.image, d.link ORDER BY d.transid DESC;";
+
+  const itemss = await db.all(strr);
+  await storeDataInRedis(strr, itemss);
+  // Send your custom response
+  return new Response(JSON.stringify(itemss), {
+    headers: { "Content-Type": "application/json" },
+    status: 200,
+  });
 }
