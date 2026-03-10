@@ -1,11 +1,15 @@
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
 import Redis from "ioredis";
-
+import { MeiliSearch } from "meilisearch";
 // Set up Redis connection
 const redis = new Redis({
   host: "localhost",
   port: 6379,
+});
+const client = new MeiliSearch({
+  host: "http://localhost:7700",
+  // apiKey: '16bc69fa-47e4-423e-bb5e-57b5b21502f5'
 });
 let db = null;
 async function storeDataInRedis(key, value) {
@@ -52,6 +56,27 @@ export async function POST(request) {
   // const str ='SELECT * FROM data';
   const items = await db.all(strrr);
   await storeDataInRedis(strrr, items);
+  try{
+  client
+    .index("mycart")
+    .delete({})
+    .then(() => {
+      console.log("All documents have been deleted.");
+
+      // Add new documents after deletion
+      return client.index("mycart").addDocuments(items);
+    })
+    .then((res) => {
+      console.log("New data added successfully:", res);
+    })
+    .catch((err) => {
+      console.error("Error:", err);
+    });}
+    catch(err){
+      console.log(err);
+    }
+
+  
   return new Response(JSON.stringify(items), {
     headers: { "Content-Type": "application/json" },
     status: 200,

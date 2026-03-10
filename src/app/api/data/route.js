@@ -10,7 +10,8 @@ const redis = new Redis({
 let db = null;
 async function fetchData(query) {
   // Check if data is cached in Redis
-  const cachedData = await redis.get(query);
+   const cachedData = await redis.get(query);
+  //const cachedData = false;
   if (cachedData) {
     console.log("Data fetched from Redis");
     return JSON.parse(cachedData); // Return parsed JSON data from cache

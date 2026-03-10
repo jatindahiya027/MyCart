@@ -13,7 +13,7 @@ async def ajio(url: str) -> str | None:
     try:
         clean_url = url.split('?')[0]
         extracted_part = "/".join(clean_url.split('/')[-2:])
-        json_url = f"https://www.ajio.com/api/{extracted_part}"
+        json_url = f"https://luxe.ajio.com/api/{extracted_part}"
         # print(f"Navigating to API URL: {json_url}")
     except IndexError:
         print("Error: Invalid Ajio URL format.")
@@ -21,7 +21,7 @@ async def ajio(url: str) -> str | None:
 
     chrome_options = Options()
     # chrome_options.add_argument("--headless")  # Optional: run headless
-    # chrome_options.add_argument("--start-maximized")
+    chrome_options.add_argument("--start-maximized")
 
     driver = None
     try:

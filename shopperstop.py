@@ -23,16 +23,16 @@ response = requests.get(url, headers=headers)
 soup = BeautifulSoup(response.text, "html.parser")
 
 # Find the <script> tag with id="__NEXT_DATA__"
-script_tag = soup.find("script", type="application/ld+json")
+script_tag = soup.find("script", type="application/json")
 
 if script_tag:
     product_data = {}
     # print(script_tag.string)
     product_dataa = json.loads(script_tag.string)
     
-    product_name = product_dataa[0]["name"]
-    image = product_dataa[0]["image"]
-    price = product_dataa[0]["offers"]["price"]
+    product_name = product_dataa["props"]["pageProps"]["dehydratedState"]["queries"][1]["state"]["data"]["data"]["products"]["items"][0]["name"]
+    image = product_dataa["props"]["pageProps"]["dehydratedState"]["queries"][1]["state"]["data"]["data"]["products"]["items"][0]["additional_images"][0]["url"]
+    price = product_dataa["props"]["pageProps"]["dehydratedState"]["queries"][1]["state"]["data"]["data"]["products"]["items"][0]["variants"][0]["product"]["price_range"]["minimum_price"]["final_price"]["value"]
     product_data['product_name']=product_name
     product_data['product_price']=price
     product_data['product_image_url']=image
