@@ -123,14 +123,19 @@ async function scrapeblkbrdshoemakerProduct(url) {
   let browser;
   try {
     browser = await puppeteer.launch({
-      headless: "new",
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    });
+          headless: false,
+      defaultViewport: null,
+       args: ["--start-maximized", "--window-position=2000,2000"],
+          // headless: "new",
+          // args: ["--no-sandbox", "--disable-setuid-sandbox"],
+        });
 
     const page = await browser.newPage();
     console.log("Navigating to:", url);
-    await page.goto(url, { waitUntil: "networkidle2", timeout: 20000 });
-
+    await page.goto(url, {
+  waitUntil: "domcontentloaded",
+  timeout: 60000,
+});
     // Allow time for lazy-loaded content
     await new Promise((res) => setTimeout(res, 2000));
 
@@ -391,12 +396,14 @@ async function scrapeNykaaProduct(url) {
   try {
     browser = await puppeteer.launch({
       headless: false,
+      defaultViewport: null,
+      args: ["--start-maximized", "--window-position=2000,2000"],
       // defaultViewport: null,
     });
 
     const page = await browser.newPage();
     console.log("Navigating to:", url);
-    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 6000 });
+    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
 
     // Scroll down to trigger lazy load
     await page.evaluate(() => {
@@ -408,14 +415,14 @@ async function scrapeNykaaProduct(url) {
     await page.waitForSelector(".css-a5kl1t", { timeout: 3000 }).catch(() => null);
 
     const data = await page.evaluate(() => {
-      const name = document.querySelector(".css-cmh3n9")?.innerText.trim() || "N/A";
+      const name = document.querySelector(".css-ef32ai")?.innerText.trim() || "N/A";
 
       let priceSymbol = document.querySelector(".css-a5kl1t")?.innerText || "₹";
       let priceDigits = document.querySelector(".css-a5kl1t")?.nextSibling?.textContent?.trim() || "";
       let product_price = (priceSymbol + priceDigits).replace(/[^\d]/g, "") || "N/A";
 
       // Prefer large display image first
-      let imgElement =document.querySelector(".css-z904mr");
+      let imgElement =document.querySelector(".css-kwk7lt");
         
       console.log(imgElement);
       let product_image_url = "N/A";
@@ -444,8 +451,8 @@ async function myntra(url) {
 
      browser = await puppeteer.launch({
       headless: false,
-      // defaultViewport: null,
-      // args: ["--start-maximized"]
+      defaultViewport: null,
+      args: ["--start-maximized", "--window-position=2000,2000"]
     });
 
     const page = await browser.newPage();
@@ -492,7 +499,9 @@ async function myntra(url) {
   }
 }
 async function extractFlipkartProductData(url) {
-  browser = await puppeteer.launch({ headless: true }); // Visible browser for debugging
+  browser = await puppeteer.launch({ headless: false,
+      defaultViewport: null,
+      args: ["--start-maximized", "--window-position=2000,2000"] }); // Visible browser for debugging
   const page = await browser.newPage();
 
   await page.setUserAgent(
@@ -503,7 +512,7 @@ async function extractFlipkartProductData(url) {
   });
 
   try {
-    await page.goto(url, { waitUntil: "networkidle2", timeout: 60000 });
+    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
 
     // Get product name and price from JSON-LD
     const productInfo = await page.$$eval(
@@ -537,10 +546,18 @@ async function extractFlipkartProductData(url) {
     );
 
     // Get image URL from the DOM using the provided class
-    const productImageURL = await page.$eval(
-      "img.DByuf4.IZexXJ.jLEJ7H",
-      (img) => img.src
-    );
+    const productImageURL = await page.evaluate(() => {
+  const source = document.querySelector("picture source");
+  
+  if (source) {
+    const srcset = source.getAttribute("srcset") || "";
+    return srcset.split(",")[0].split(" ")[0];
+  }
+
+  // fallback to img
+  const img = document.querySelector("picture img");
+  return img?.src || null;
+});
 
     const finalData = {
       product_name: productInfo?.product_name || "N/A",
@@ -560,25 +577,89 @@ async function extractFlipkartProductData(url) {
   }
 }
 async function scrapeAmazonProduct(url) {
-  if (!url) return { error: "No URL provided" };
+  if (!url) return JSON.stringify({ error: "No URL provided" });
 
-  browser = await puppeteer.launch({ headless: true });
-  const page = await browser.newPage();
-
-  await page.setUserAgent(
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36"
-  );
+  let browser;
 
   try {
-    await page.goto(url, { waitUntil: "domcontentloaded" });
+    browser = await puppeteer.launch({
+      headless: false,
+      defaultViewport: null,
+      args: ["--start-maximized", "--window-position=2000,2000"],
+    });
 
-    await page.waitForSelector("#productTitle", { timeout: 10000 });
+    const page = await browser.newPage();
 
+    await page.setUserAgent(
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36"
+    );
+
+    await page.setExtraHTTPHeaders({
+      "accept-language": "en-US,en;q=0.9",
+    });
+
+    await page.goto(url, {
+      waitUntil: "domcontentloaded",
+      timeout: 60000,
+    });
+
+    // 🔥 HANDLE CONTINUE SHOPPING (robust)
+    try {
+      // wait for either product OR button
+      await Promise.race([
+        page.waitForSelector("#productTitle", { timeout: 7000 }),
+        page.waitForSelector("button.a-button-text", { timeout: 7000 }),
+      ]);
+
+      const continueBtn = await page.evaluate(() => {
+        const buttons = Array.from(document.querySelectorAll("button.a-button-text"));
+        const btn = buttons.find(b =>
+          b.innerText.toLowerCase().includes("continue")
+        );
+        if (btn) {
+          btn.click();
+          return true;
+        }
+        return false;
+      });
+
+      if (continueBtn) {
+        console.log("⚠️ Clicked Continue Shopping");
+
+        await page.waitForNavigation({
+          waitUntil: "domcontentloaded",
+          timeout: 60000,
+        });
+      }
+    } catch (e) {
+      // no button, continue normally
+    }
+
+    // 🔥 ENSURE PRODUCT PAGE LOAD
+    let loaded = false;
+    for (let i = 0; i < 3; i++) {
+      try {
+        await page.waitForSelector("#productTitle", { timeout: 15000 });
+        loaded = true;
+        break;
+      } catch {
+        console.log("⏳ Retrying...");
+        await page.reload({ waitUntil: "domcontentloaded" });
+      }
+    }
+
+    if (!loaded) {
+      throw new Error("Product page not loaded");
+    }
+
+    // 🔥 SCRAPE
     const productInfo = await page.evaluate(() => {
       const name =
         document.querySelector("#productTitle")?.innerText.trim() || "";
+
       let price = "";
       const prices = document.querySelectorAll("span.a-price-whole");
+
       for (const p of prices) {
         const text = p.innerText.replace(/[^\d]/g, "");
         if (text) {
@@ -586,31 +667,32 @@ async function scrapeAmazonProduct(url) {
           break;
         }
       }
+
+      const image =
+        document.querySelector(".imgTagWrapper img")?.src || "";
+
       return {
         product_name: name,
         product_price: price,
+        product_image_url: image,
       };
     });
 
-    const productImageURL = await page.evaluate(() => {
-      return document.querySelector(".imgTagWrapper img")?.src || "";
-    });
-
     const finalData = {
-      product_name: productInfo?.product_name || "N/A",
-      product_price: productInfo?.product_price || "N/A",
-      product_image_url: productImageURL || "N/A",
+      product_name: productInfo.product_name || "N/A",
+      product_price: productInfo.product_price || "N/A",
+      product_image_url: productInfo.product_image_url || "N/A",
     };
 
     console.log(JSON.stringify(finalData, null, 2));
+
     return JSON.stringify(finalData);
+
   } catch (error) {
-    console.error("❌ Error extracting product data:", error.message);
-    return null;
+    console.error("❌ Error:", error.message);
+    return JSON.stringify({ error: error.message });
   } finally {
-      if (browser) 
-        await browser.close();
-    
+    if (browser) await browser.close();
   }
 }
 async function tatacliq(url) {
@@ -639,6 +721,38 @@ async function tatacliq(url) {
   } catch (error) {
     console.error("There was a problem with the fetch operation:", error);
     return null; // Return null or handle the error appropriately
+  }
+}
+async function luxurytatacliq(url) {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error("Network response was not ok: " + response.statusText);
+    }
+
+    const html = await response.text();
+
+    // Extract window.initialData from the script tag
+    const match = html.match(/window\.initialData\s*=\s*(\{[\s\S]*?\})(?=\s*<\/script>)/);
+    if (!match) {
+      throw new Error("Could not find window.initialData in page");
+    }
+
+    const initialData = JSON.parse(match[1]);
+    const product = initialData.productDescriptionData;
+
+    const database = {
+      product_name: product.productName,
+      product_image_url: "https:" + product.galleryImagesList[0].galleryImages[0].value,
+      product_price: product.winningSellerPrice.value,
+      // product_currency: product.winningSellerPrice.currencySymbol,
+      // product_price_formatted: product.winningSellerPrice.commaFormattedValueNoDecimal,
+    };
+
+    return JSON.stringify(database);
+  } catch (error) {
+    console.error("There was a problem with the fetch operation:", error);
+    return null;
   }
 }
 function extractDomain(url) {
@@ -781,6 +895,19 @@ export async function POST(request) {
       }
     } else if (domain === "tatacliq") {
       data = await tatacliq(items[x].link);
+      if (data) {
+        data = JSON.parse(data);
+      } else {
+        console.error("❌ Failed to get data from scraper.");
+        // Handle gracefully, maybe:
+        data = {
+          product_name: "N/A",
+          product_price: "N/A",
+          product_image_url: "N/A",
+        };
+      }
+    } else if (domain === "luxury") {
+      data = await luxurytatacliq(items[x].link);
       if (data) {
         data = JSON.parse(data);
       } else {
