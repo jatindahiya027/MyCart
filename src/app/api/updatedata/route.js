@@ -446,7 +446,7 @@ async function scrapeNykaaProduct(url) {
 }
 async function myntra(url) {
   try {
-    const extractedPart = url.split("/").slice(-2)[0];
+    const extractedPart = url.split("/").filter(seg => /^\d+$/.test(seg)).pop();
     const apiUrl = `https://www.myntra.com/gateway/v2/product/${extractedPart}`;
 
      browser = await puppeteer.launch({

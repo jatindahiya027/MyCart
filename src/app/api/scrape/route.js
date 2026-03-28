@@ -528,22 +528,27 @@ async function extractFlipkartProductData(url) {
 }
 async function myntra(url) {
   try {
-    const extractedPart = url.split("/").slice(-2)[0];
+    const extractedPart = url.split("/").filter(seg => /^\d+$/.test(seg)).pop();
     const apiUrl = `https://www.myntra.com/gateway/v2/product/${extractedPart}`;
 
     browser = await puppeteer.launch({
       headless: false,
       defaultViewport: null,
-      args: ["--start-maximized", "--window-position=2000,2000"]
+      args: ["--start-maximized", "--window-position=2000,2000",'--no-sandbox',
+    '--disable-setuid-sandbox',
+    '--disable-blink-features=AutomationControlled',]
     });
 
     const page = await browser.newPage();
-
+    await page.setUserAgent(
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
+  '(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+);
     // Go to any valid HTML page to run JS fetch (cannot run fetch directly on JSON API)
     await page.goto("https://www.myntra.com", {
       waitUntil: "domcontentloaded",
     });
-    // console.log(apiUrl);
+    console.log(apiUrl);
     const data = await page.evaluate(async (apiUrl) => {
       const response = await fetch(apiUrl);
       if (!response.ok) {
