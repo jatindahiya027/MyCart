@@ -25,9 +25,17 @@ const chartConfig = {
   },
 };
 
-const ItemCard = ({ item, setitemdata, selectedOption }) => {
+const ItemCard = ({
+  item,
+  setitemdata,
+  selectedOption,
+  isSelectMode,
+  isSelected,
+  onToggleSelect,
+}) => {
   const [data, setData] = useState([]);
   const [graph, setGraph] = useState(false);
+  const [isScraping, setIsScraping] = useState(false);
 
   const fetchdata = async (index) => {
     await fetch("/api/deleterecord", {
@@ -49,12 +57,29 @@ const ItemCard = ({ item, setitemdata, selectedOption }) => {
       .then((res) => res.json())
       .then((data) => setData(data))
       .catch((error) => {
-        console.error("Error fetching data from db:", error);
+        console.error("Error fetching graph data:", error);
       });
   };
 
   const handleDelete = (index) => {
     fetchdata(index);
+  };
+
+  const handleScrape = async () => {
+    setIsScraping(true);
+    try {
+      const res = await fetch("/api/scrapeitem", {
+        method: "POST",
+        body: JSON.stringify({ transid: item.transid, link: item.link, selectedOption }),
+      });
+      const data = await res.json();
+      if (Array.isArray(data)) setitemdata(data);
+      else console.error("scrapeitem error:", data?.error);
+    } catch (err) {
+      console.error("Error refreshing item price:", err);
+    } finally {
+      setIsScraping(false);
+    }
   };
 
   const toggleVisibility = (index) => {
@@ -66,7 +91,24 @@ const ItemCard = ({ item, setitemdata, selectedOption }) => {
 
   return (
     <>
-      <div className="item-card">
+      <div
+        className={`item-card${isSelected ? " item-card--selected" : ""}`}
+        onClick={isSelectMode ? () => onToggleSelect(item.transid) : undefined}
+        style={isSelectMode ? { cursor: "pointer" } : undefined}
+      >
+        {/* Checkbox (select mode) */}
+        {isSelectMode && (
+          <div className="item-checkbox">
+            <div className={`checkbox${isSelected ? " checkbox--checked" : ""}`}>
+              {isSelected && (
+                <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M2 6l3 3 5-5" />
+                </svg>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Image */}
         <div className="item-image">
           <motion.div
@@ -108,37 +150,59 @@ const ItemCard = ({ item, setitemdata, selectedOption }) => {
         {/* Actions */}
         <div className="item-actions">
           <span className="item-date">{item.current_price_date}</span>
-          <div className="action-btns">
-            {/* Chart toggle */}
-            <motion.button
-              className={`chart-btn${graph ? " active" : ""}`}
-              onClick={() => toggleVisibility(item.transid)}
-              whileTap={{ scale: 0.88 }}
-              title={graph ? "Hide chart" : "Show price history"}
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-              </svg>
-            </motion.button>
+          {!isSelectMode && (
+            <div className="action-btns">
+              {/* Per-item scrape */}
+              <motion.button
+                className={`scrape-btn${isScraping ? " scrape-btn--loading" : ""}`}
+                onClick={(e) => { e.stopPropagation(); handleScrape(); }}
+                whileTap={{ scale: 0.88 }}
+                disabled={isScraping}
+                title="Refresh this item's price"
+              >
+                {isScraping ? (
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" style={{ animation: "spin 0.8s linear infinite" }}>
+                    <circle cx="12" cy="12" r="9" strokeDasharray="28 56" />
+                  </svg>
+                ) : (
+                  <svg width="13" height="13" viewBox="0 0 15 15" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M13.5 7.5a6 6 0 1 1-1.5-4"/>
+                    <path d="M12 1v3.5H8.5"/>
+                  </svg>
+                )}
+              </motion.button>
 
-            {/* Delete */}
-            <motion.button
-              className="delete-btn"
-              onClick={() => handleDelete(item.transid)}
-              whileTap={{ scale: 0.88 }}
-              title="Remove item"
-            >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>
-              </svg>
-            </motion.button>
-          </div>
+              {/* Chart toggle */}
+              <motion.button
+                className={`chart-btn${graph ? " active" : ""}`}
+                onClick={() => toggleVisibility(item.transid)}
+                whileTap={{ scale: 0.88 }}
+                title={graph ? "Hide chart" : "Show price history"}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                </svg>
+              </motion.button>
+
+              {/* Delete */}
+              <motion.button
+                className="delete-btn"
+                onClick={() => handleDelete(item.transid)}
+                whileTap={{ scale: 0.88 }}
+                title="Remove item"
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>
+                </svg>
+              </motion.button>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Price chart */}
       <AnimatePresence>
-        {graph && (
+        {graph && !isSelectMode && (
           <motion.div
             initial={{ opacity: 0, y: -8, scaleY: 0.95 }}
             animate={{ opacity: 1, y: 0, scaleY: 1 }}

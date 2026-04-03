@@ -14,6 +14,11 @@ export default function Home() {
   const [isScraping, setIsScraping] = useState(false);
   const urlInputRef = useRef(null);
 
+  // Bulk select state
+  const [isSelectMode, setIsSelectMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState(new Set());
+  const [isBulkDeleting, setIsBulkDeleting] = useState(false);
+
   const handleChange = (event) => {
     setSelectedOption(event.target.value);
   };
@@ -81,7 +86,6 @@ export default function Home() {
     fetchdata();
   }, [selectedOption]);
 
-  // Focus URL input when bar opens
   useEffect(() => {
     if (showUrlBar && urlInputRef.current) {
       setTimeout(() => urlInputRef.current?.focus(), 50);
@@ -96,14 +100,58 @@ export default function Home() {
     }
   };
 
-  const openUrlBar = () => {
-    setShowUrlBar(true);
-  };
-
+  const openUrlBar = () => setShowUrlBar(true);
   const dismissUrlBar = () => {
     setShowUrlBar(false);
     setInputValue("");
   };
+
+  // Bulk select helpers
+  const toggleSelectMode = () => {
+    setIsSelectMode((prev) => !prev);
+    setSelectedIds(new Set());
+  };
+
+  const handleToggleSelect = (id) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const handleSelectAll = () => {
+    if (selectedIds.size === itemdata.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(itemdata.map((i) => i.transid)));
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedIds.size === 0) return;
+    setIsBulkDeleting(true);
+    try {
+      const res = await fetch("/api/bulkdelete", {
+        method: "POST",
+        body: JSON.stringify({
+          ids: Array.from(selectedIds),
+          selectedOption,
+        }),
+      });
+      const data = await res.json();
+      if (Array.isArray(data)) setitemdata(data);
+    } catch (err) {
+      console.error("Bulk delete error:", err);
+    } finally {
+      setIsBulkDeleting(false);
+      setSelectedIds(new Set());
+      setIsSelectMode(false);
+    }
+  };
+
+  const allSelected = itemdata.length > 0 && selectedIds.size === itemdata.length;
 
   return (
     <div className="container">
@@ -117,43 +165,106 @@ export default function Home() {
         {/* Toolbar */}
         <div className="toolbar">
           <div className="toolbar-left">
-            <span className="item-count">{itemdata.length} items</span>
-            <select
-              className="sort-select"
-              value={selectedOption}
-              onChange={handleChange}
-            >
-              <option value="Relevance">Relevance</option>
-              <option value="Price (Highest first)">Price ↓</option>
-              <option value="Price (Lowest first)">Price ↑</option>
-              <option value="Date (Highest first)">Newest</option>
-              <option value="Date (Lowest first)">Oldest</option>
-            </select>
+            {isSelectMode ? (
+              <>
+                <button className="select-all-btn" onClick={handleSelectAll}>
+                  {allSelected ? "Deselect all" : "Select all"}
+                </button>
+                <span className="item-count">
+                  {selectedIds.size > 0
+                    ? `${selectedIds.size} selected`
+                    : `${itemdata.length} items`}
+                </span>
+              </>
+            ) : (
+              <>
+                <span className="item-count">{itemdata.length} items</span>
+                <select
+                  className="sort-select"
+                  value={selectedOption}
+                  onChange={handleChange}
+                >
+                  <option value="Relevance">Relevance</option>
+                  <option value="Price (Highest first)">Price ↓</option>
+                  <option value="Price (Lowest first)">Price ↑</option>
+                  <option value="Date (Highest first)">Newest</option>
+                  <option value="Date (Lowest first)">Oldest</option>
+                </select>
+              </>
+            )}
           </div>
 
           <div className="toolbar-right">
-            {/* Refresh */}
-            <motion.button
-              className={`icon-btn${isRefreshing ? " spinning" : ""}`}
-              onClick={fetchupdateddata}
-              whileTap={{ scale: 0.9 }}
-              title="Refresh prices"
-            >
-              <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M13.5 7.5a6 6 0 1 1-1.5-4"/>
-                <path d="M12 1v3.5H8.5"/>
-              </svg>
-            </motion.button>
+            {isSelectMode ? (
+              <>
+                {/* Cancel */}
+                <motion.button
+                  className="cancel-select-btn"
+                  onClick={toggleSelectMode}
+                  whileTap={{ scale: 0.96 }}
+                >
+                  Cancel
+                </motion.button>
+                {/* Delete selected */}
+                <motion.button
+                  className={`bulk-delete-btn${selectedIds.size === 0 ? " bulk-delete-btn--disabled" : ""}`}
+                  onClick={handleBulkDelete}
+                  disabled={selectedIds.size === 0 || isBulkDeleting}
+                  whileTap={{ scale: 0.96 }}
+                >
+                  {isBulkDeleting ? (
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" style={{ animation: "spin 0.8s linear infinite" }}>
+                      <circle cx="12" cy="12" r="9" strokeDasharray="28 56" />
+                    </svg>
+                  ) : (
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>
+                    </svg>
+                  )}
+                  Delete{selectedIds.size > 0 ? ` (${selectedIds.size})` : ""}
+                </motion.button>
+              </>
+            ) : (
+              <>
+                {/* Select mode toggle */}
+                <motion.button
+                  className="icon-btn"
+                  onClick={toggleSelectMode}
+                  whileTap={{ scale: 0.9 }}
+                  title="Select items"
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="5" width="4" height="4" rx="1"/>
+                    <path d="M10 7h11M10 12h11M10 17h11"/>
+                    <rect x="3" y="10" width="4" height="4" rx="1"/>
+                    <rect x="3" y="15" width="4" height="4" rx="1"/>
+                  </svg>
+                </motion.button>
 
-            {/* Add URL */}
-            <motion.button
-              className="add-btn"
-              onClick={openUrlBar}
-              whileTap={{ scale: 0.96 }}
-            >
-              <span className="add-btn-icon">+</span>
-              <span className="add-btn-label">Add URL</span>
-            </motion.button>
+                {/* Refresh */}
+                <motion.button
+                  className={`icon-btn${isRefreshing ? " spinning" : ""}`}
+                  onClick={fetchupdateddata}
+                  whileTap={{ scale: 0.9 }}
+                  title="Refresh prices"
+                >
+                  <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M13.5 7.5a6 6 0 1 1-1.5-4"/>
+                    <path d="M12 1v3.5H8.5"/>
+                  </svg>
+                </motion.button>
+
+                {/* Add URL */}
+                <motion.button
+                  className="add-btn"
+                  onClick={openUrlBar}
+                  whileTap={{ scale: 0.96 }}
+                >
+                  <span className="add-btn-icon">+</span>
+                  <span className="add-btn-label">Add URL</span>
+                </motion.button>
+              </>
+            )}
           </div>
         </div>
 
@@ -168,7 +279,6 @@ export default function Home() {
               style={{ overflow: "hidden" }}
             >
               <div className="url-input-bar">
-                {/* Link icon */}
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0}}>
                   <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
                   <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
@@ -184,7 +294,6 @@ export default function Home() {
                   autoCorrect="off"
                   spellCheck={false}
                 />
-                {/* Submit */}
                 <button
                   className="url-submit-btn"
                   onClick={enterdata}
@@ -201,7 +310,6 @@ export default function Home() {
                     </svg>
                   )}
                 </button>
-                {/* Dismiss */}
                 <button className="url-dismiss-btn" onClick={dismissUrlBar} title="Cancel">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                     <path d="M18 6 6 18M6 6l12 12"/>
@@ -239,6 +347,9 @@ export default function Home() {
                   item={item}
                   setitemdata={setitemdata}
                   selectedOption={selectedOption}
+                  isSelectMode={isSelectMode}
+                  isSelected={selectedIds.has(item.transid)}
+                  onToggleSelect={handleToggleSelect}
                 />
               </motion.div>
             ))
