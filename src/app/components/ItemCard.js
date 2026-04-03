@@ -77,8 +77,8 @@ const ItemCard = ({ item, setitemdata, selectedOption }) => {
               className="image fixsize"
               alt={item.name}
               src={item.image}
-              height={96}
-              width={68}
+              height={110}
+              width={96}
             />
           </motion.div>
         </div>

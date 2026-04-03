@@ -67,7 +67,7 @@ input, select {
    LAYOUT
    ============================================================ */
 .container {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
   min-height: 100dvh;
   padding-bottom: 80px;
@@ -322,8 +322,8 @@ input, select {
 .item-card {
   position: relative;
   display: grid;
-  grid-template-columns: 76px 1fr auto;
-  gap: 12px;
+  grid-template-columns: 100px 1fr auto;
+  gap: 14px;
   align-items: start;
   padding: 14px;
   border: 1px solid var(--border);
@@ -351,9 +351,9 @@ input, select {
 }
 
 .fixsize {
-  width: 68px;
-  height: 96px;
-  max-height: 96px;
+  width: 96px;
+  height: 110px;
+  max-height: 110px;
   object-fit: cover;
   border-radius: var(--radius-sm);
 }
@@ -433,7 +433,7 @@ input, select {
   align-items: flex-end;
   justify-content: space-between;
   gap: 8px;
-  min-height: 96px;
+  min-height: 110px;
 }
 
 .item-date {
@@ -515,12 +515,12 @@ input, select {
   .item-list { padding: 12px; gap: 6px; }
 
   .item-card {
-    grid-template-columns: 62px 1fr auto;
+    grid-template-columns: 76px 1fr auto;
     gap: 10px;
     padding: 12px;
   }
 
-  .fixsize { width: 56px; height: 80px; }
+  .fixsize { width: 68px; height: 88px; }
   .item-name { font-size: 13px; }
   .current-price { font-size: 19px; }
 
