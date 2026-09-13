@@ -1,0 +1,1364 @@
+{
+  "description": "Store domains accepted by MyCart. Specialized handlers remain in scrape_product.py; all other entries use the structured-data storefront pipeline.",
+  "sites": [
+    {
+      "name": "Acer India",
+      "site": "acer",
+      "hostname": "store.acer.com",
+      "baseUrl": "https://store.acer.com/en-in/"
+    },
+    {
+      "name": "Adidas India",
+      "site": "adidas",
+      "hostname": "adidas.co.in",
+      "baseUrl": "https://www.adidas.co.in/"
+    },
+    {
+      "name": "AJIO",
+      "site": "ajio",
+      "hostname": "ajio.com",
+      "baseUrl": "https://www.ajio.com/"
+    },
+    {
+      "name": "AJIO Luxe",
+      "site": "luxe",
+      "hostname": "luxe.ajio.com",
+      "baseUrl": "https://luxe.ajio.com/"
+    },
+    {
+      "name": "Allen Solly",
+      "site": "allensolly",
+      "hostname": "allensolly.abfrl.in",
+      "baseUrl": "https://allensolly.abfrl.in/"
+    },
+    {
+      "name": "Almost Gods",
+      "site": "almostgods",
+      "hostname": "almostgods.com",
+      "baseUrl": "https://almostgods.com/"
+    },
+    {
+      "name": "Amazon India",
+      "site": "amazon",
+      "hostname": "amazon.in",
+      "baseUrl": "https://www.amazon.in/"
+    },
+    {
+      "name": "Ambrane",
+      "site": "ambraneindia",
+      "hostname": "ambraneindia.com",
+      "baseUrl": "https://www.ambraneindia.com/"
+    },
+    {
+      "name": "American Tourister India",
+      "site": "americantourister",
+      "hostname": "americantourister.in",
+      "baseUrl": "https://www.americantourister.in/"
+    },
+    {
+      "name": "Andamen",
+      "site": "andamen",
+      "hostname": "andamen.com",
+      "baseUrl": "https://www.andamen.com/"
+    },
+    {
+      "name": "Apple India",
+      "site": "apple",
+      "hostname": "apple.com",
+      "baseUrl": "https://www.apple.com/in/store"
+    },
+    {
+      "name": "Aqualogica",
+      "site": "aqualogica",
+      "hostname": "aqualogica.in",
+      "baseUrl": "https://aqualogica.in/"
+    },
+    {
+      "name": "ASICS India",
+      "site": "asics",
+      "hostname": "asics.co.in",
+      "baseUrl": "https://www.asics.co.in/"
+    },
+    {
+      "name": "ASUS India",
+      "site": "asus",
+      "hostname": "asus.com",
+      "baseUrl": "https://www.asus.com/in/"
+    },
+    {
+      "name": "Aza Fashions",
+      "site": "azafashions",
+      "hostname": "azafashions.com",
+      "baseUrl": "https://www.azafashions.com/"
+    },
+    {
+      "name": "Bata India",
+      "site": "bata",
+      "hostname": "bata.in",
+      "baseUrl": "https://www.bata.in/",
+      "aliases": [
+        "bata.com"
+      ]
+    },
+    {
+      "name": "Bewakoof",
+      "site": "bewakoof",
+      "hostname": "bewakoof.com",
+      "baseUrl": "https://www.bewakoof.com/"
+    },
+    {
+      "name": "Biba",
+      "site": "biba",
+      "hostname": "biba.in",
+      "baseUrl": "https://www.biba.in/"
+    },
+    {
+      "name": "Birkenstock India",
+      "site": "birkenstock",
+      "hostname": "birkenstock.in",
+      "baseUrl": "https://www.birkenstock.in/"
+    },
+    {
+      "name": "Blackberrys",
+      "site": "blackberrys",
+      "hostname": "blackberrys.com",
+      "baseUrl": "https://blackberrys.com/"
+    },
+    {
+      "name": "BLKBRD Shoemaker",
+      "site": "blkbrdshoemaker",
+      "hostname": "blkbrdshoemaker.com",
+      "baseUrl": "https://www.blkbrdshoemaker.com/"
+    },
+    {
+      "name": "BLUORNG",
+      "site": "bluorng",
+      "hostname": "bluorng.com",
+      "baseUrl": "https://bluorng.com/"
+    },
+    {
+      "name": "boAt",
+      "site": "boat-lifestyle",
+      "hostname": "boat-lifestyle.com",
+      "baseUrl": "https://www.boat-lifestyle.com/"
+    },
+    {
+      "name": "Bombay Shirt Company",
+      "site": "bombayshirts",
+      "hostname": "bombayshirts.com",
+      "baseUrl": "https://www.bombayshirts.com/"
+    },
+    {
+      "name": "Bonkers Corner",
+      "site": "bonkerscorner",
+      "hostname": "bonkerscorner.com",
+      "baseUrl": "https://www.bonkerscorner.com/"
+    },
+    {
+      "name": "Bookswagon",
+      "site": "bookswagon",
+      "hostname": "bookswagon.com",
+      "baseUrl": "https://www.bookswagon.com/"
+    },
+    {
+      "name": "Campus",
+      "site": "campusshoes",
+      "hostname": "campusshoes.com",
+      "baseUrl": "https://www.campusshoes.com/"
+    },
+    {
+      "name": "Chumbak",
+      "site": "chumbak",
+      "hostname": "chumbak.com",
+      "baseUrl": "https://www.chumbak.com/"
+    },
+    {
+      "name": "ClearDekho",
+      "site": "cleardekho",
+      "hostname": "cleardekho.com",
+      "baseUrl": "https://www.cleardekho.com/"
+    },
+    {
+      "name": "Colorbar",
+      "site": "colorbarcosmetics",
+      "hostname": "colorbarcosmetics.com",
+      "baseUrl": "https://www.colorbarcosmetics.com/"
+    },
+    {
+      "name": "Comet",
+      "site": "wearcomet",
+      "hostname": "wearcomet.com",
+      "baseUrl": "https://www.wearcomet.com/"
+    },
+    {
+      "name": "Converse India",
+      "site": "converse",
+      "hostname": "converse.in",
+      "baseUrl": "https://www.converse.in/"
+    },
+    {
+      "name": "Cosco",
+      "site": "cosco",
+      "hostname": "cosco.in",
+      "baseUrl": "https://www.cosco.in/"
+    },
+    {
+      "name": "Crocs India",
+      "site": "crocs",
+      "hostname": "crocs.in",
+      "baseUrl": "https://www.crocs.in/"
+    },
+    {
+      "name": "Croma",
+      "site": "croma",
+      "hostname": "croma.com",
+      "baseUrl": "https://www.croma.com/"
+    },
+    {
+      "name": "Crossword",
+      "site": "crossword",
+      "hostname": "crossword.in",
+      "baseUrl": "https://www.crossword.in/"
+    },
+    {
+      "name": "Cultsport",
+      "site": "cultsport",
+      "hostname": "cultsport.com",
+      "baseUrl": "https://cultsport.com/",
+      "aliases": [
+        "cultstore.com"
+      ]
+    },
+    {
+      "name": "DailyObjects",
+      "site": "dailyobjects",
+      "hostname": "dailyobjects.com",
+      "baseUrl": "https://www.dailyobjects.com/"
+    },
+    {
+      "name": "Decathlon India",
+      "site": "decathlon",
+      "hostname": "decathlon.in",
+      "baseUrl": "https://www.decathlon.in/"
+    },
+    {
+      "name": "Dell India",
+      "site": "dell",
+      "hostname": "dell.com",
+      "baseUrl": "https://www.dell.com/en-in",
+      "aliases": [
+        "dellstore.com"
+      ]
+    },
+    {
+      "name": "Dot & Key",
+      "site": "dotandkey",
+      "hostname": "dotandkey.com",
+      "baseUrl": "https://www.dotandkey.com/"
+    },
+    {
+      "name": "Dr. Sheth's",
+      "site": "drsheths",
+      "hostname": "drsheths.com",
+      "baseUrl": "https://www.drsheths.com/"
+    },
+    {
+      "name": "Duroflex",
+      "site": "duroflexworld",
+      "hostname": "duroflexworld.com",
+      "baseUrl": "https://www.duroflexworld.com/"
+    },
+    {
+      "name": "Elahe",
+      "site": "elahe",
+      "hostname": "elahe.in",
+      "baseUrl": "https://www.elahe.in/"
+    },
+    {
+      "name": "Ellementry",
+      "site": "ellementry",
+      "hostname": "ellementry.com",
+      "baseUrl": "https://www.ellementry.com/"
+    },
+    {
+      "name": "Ensemble India",
+      "site": "ensembleindia",
+      "hostname": "ensembleindia.com",
+      "baseUrl": "https://www.ensembleindia.com/"
+    },
+    {
+      "name": "Fabindia",
+      "site": "fabindia",
+      "hostname": "fabindia.com",
+      "baseUrl": "https://www.fabindia.com/"
+    },
+    {
+      "name": "Ferns N Petals",
+      "site": "fnp",
+      "hostname": "fnp.com",
+      "baseUrl": "https://www.fnp.com/"
+    },
+    {
+      "name": "FirstCry",
+      "site": "firstcry",
+      "hostname": "firstcry.com",
+      "baseUrl": "https://www.firstcry.com/"
+    },
+    {
+      "name": "Flipkart",
+      "site": "flipkart",
+      "hostname": "flipkart.com",
+      "baseUrl": "https://www.flipkart.com/"
+    },
+    {
+      "name": "FlowerAura",
+      "site": "floweraura",
+      "hostname": "floweraura.com",
+      "baseUrl": "https://www.floweraura.com/"
+    },
+    {
+      "name": "Forest Essentials",
+      "site": "forestessentialsindia",
+      "hostname": "forestessentialsindia.com",
+      "baseUrl": "https://www.forestessentialsindia.com/"
+    },
+    {
+      "name": "Forever New India",
+      "site": "forevernew",
+      "hostname": "forevernew.co.in",
+      "baseUrl": "https://www.forevernew.co.in/"
+    },
+    {
+      "name": "Foxtale",
+      "site": "foxtale",
+      "hostname": "foxtale.in",
+      "baseUrl": "https://foxtale.in/"
+    },
+    {
+      "name": "Foxy",
+      "site": "foxy",
+      "hostname": "foxy.in",
+      "baseUrl": "https://www.foxy.in/"
+    },
+    {
+      "name": "Freedom Tree",
+      "site": "freedomtree",
+      "hostname": "freedomtree.in",
+      "baseUrl": "https://freedomtree.in/"
+    },
+    {
+      "name": "Funskool",
+      "site": "funskoolindia",
+      "hostname": "funskoolindia.com",
+      "baseUrl": "https://www.funskoolindia.com/"
+    },
+    {
+      "name": "Giftcart",
+      "site": "giftcart",
+      "hostname": "giftcart.com",
+      "baseUrl": "https://www.giftcart.com/"
+    },
+    {
+      "name": "Google Store India",
+      "site": "google",
+      "hostname": "store.google.com",
+      "baseUrl": "https://store.google.com/in/"
+    },
+    {
+      "name": "Gully Labs",
+      "site": "gullylabs",
+      "hostname": "gullylabs.com",
+      "baseUrl": "https://gullylabs.com/"
+    },
+    {
+      "name": "H&M India",
+      "site": "hm",
+      "hostname": "www2.hm.com",
+      "baseUrl": "https://www2.hm.com/en_in/index.html"
+    },
+    {
+      "name": "Hamleys India",
+      "site": "hamleys",
+      "hostname": "hamleys.in",
+      "baseUrl": "https://www.hamleys.in/"
+    },
+    {
+      "name": "Heads Up For Tails",
+      "site": "headsupfortails",
+      "hostname": "headsupfortails.com",
+      "baseUrl": "https://headsupfortails.com/"
+    },
+    {
+      "name": "Health & Glow",
+      "site": "healthandglow",
+      "hostname": "healthandglow.com",
+      "baseUrl": "https://www.healthandglow.com/"
+    },
+    {
+      "name": "Home Centre",
+      "site": "homecentre",
+      "hostname": "homecentre.in",
+      "baseUrl": "https://www.homecentre.in/in/en/"
+    },
+    {
+      "name": "Hopscotch",
+      "site": "hopscotch",
+      "hostname": "hopscotch.in",
+      "baseUrl": "https://www.hopscotch.in/"
+    },
+    {
+      "name": "House of Chikankari",
+      "site": "houseofchikankari",
+      "hostname": "houseofchikankari.in",
+      "baseUrl": "https://www.houseofchikankari.in/"
+    },
+    {
+      "name": "HP India",
+      "site": "hp",
+      "hostname": "hp.com",
+      "baseUrl": "https://www.hp.com/in-en/shop/"
+    },
+    {
+      "name": "HUEMN",
+      "site": "huemn",
+      "hostname": "huemn.in",
+      "baseUrl": "https://huemn.in/"
+    },
+    {
+      "name": "IGP",
+      "site": "igp",
+      "hostname": "igp.com",
+      "baseUrl": "https://www.igp.com/"
+    },
+    {
+      "name": "IKEA India",
+      "site": "ikea",
+      "hostname": "ikea.com",
+      "baseUrl": "https://www.ikea.com/in/en/"
+    },
+    {
+      "name": "Imagimake",
+      "site": "imagimake",
+      "hostname": "imagimake.com",
+      "baseUrl": "https://imagimake.com/"
+    },
+    {
+      "name": "Indian Terrain",
+      "site": "indianterrain",
+      "hostname": "indianterrain.com",
+      "baseUrl": "https://www.indianterrain.com/"
+    },
+    {
+      "name": "iTokri",
+      "site": "itokri",
+      "hostname": "itokri.com",
+      "baseUrl": "https://itokri.com/"
+    },
+    {
+      "name": "Itsy Bitsy",
+      "site": "itsybitsy",
+      "hostname": "itsybitsy.in",
+      "baseUrl": "https://itsybitsy.in/"
+    },
+    {
+      "name": "Jack & Jones India",
+      "site": "jackjones",
+      "hostname": "jackjones.in",
+      "baseUrl": "https://www.jackjones.in/"
+    },
+    {
+      "name": "Jaypore",
+      "site": "jaypore",
+      "hostname": "jaypore.com",
+      "baseUrl": "https://www.jaypore.com/"
+    },
+    {
+      "name": "Jaywalking",
+      "site": "jaywalking",
+      "hostname": "jaywalking.in",
+      "baseUrl": "https://jaywalking.in/"
+    },
+    {
+      "name": "John Jacobs",
+      "site": "johnjacobseyewear",
+      "hostname": "johnjacobseyewear.com",
+      "baseUrl": "https://www.johnjacobseyewear.com/"
+    },
+    {
+      "name": "Kama Ayurveda",
+      "site": "kamaayurveda",
+      "hostname": "kamaayurveda.in",
+      "baseUrl": "https://www.kamaayurveda.in/"
+    },
+    {
+      "name": "Khadim's",
+      "site": "khadims",
+      "hostname": "khadims.com",
+      "baseUrl": "https://www.khadims.com/"
+    },
+    {
+      "name": "Kindlife",
+      "site": "kindlife",
+      "hostname": "kindlife.in",
+      "baseUrl": "https://kindlife.in/"
+    },
+    {
+      "name": "Kult",
+      "site": "kult",
+      "hostname": "kult.app",
+      "baseUrl": "https://kult.app/"
+    },
+    {
+      "name": "Lakmé",
+      "site": "lakmeindia",
+      "hostname": "lakmeindia.com",
+      "baseUrl": "https://www.lakmeindia.com/"
+    },
+    {
+      "name": "Lawrence & Mayo",
+      "site": "lawrenceandmayo",
+      "hostname": "lawrenceandmayo.co.in",
+      "baseUrl": "https://lawrenceandmayo.com/",
+      "aliases": [
+        "lawrenceandmayo.com"
+      ]
+    },
+    {
+      "name": "LEGO India",
+      "site": "lego",
+      "hostname": "lego.com",
+      "baseUrl": "https://www.lego.com/en-in"
+    },
+    {
+      "name": "Lenovo India",
+      "site": "lenovo",
+      "hostname": "lenovo.com",
+      "baseUrl": "https://www.lenovo.com/in/en/"
+    },
+    {
+      "name": "Lenskart",
+      "site": "lenskart",
+      "hostname": "lenskart.com",
+      "baseUrl": "https://www.lenskart.com/"
+    },
+    {
+      "name": "Levi's India",
+      "site": "levi",
+      "hostname": "levi.in",
+      "baseUrl": "https://levi.in/"
+    },
+    {
+      "name": "Libas",
+      "site": "libas",
+      "hostname": "libas.in",
+      "baseUrl": "https://www.libas.in/"
+    },
+    {
+      "name": "Liberty Shoes",
+      "site": "libertyshoesonline",
+      "hostname": "libertyshoesonline.com",
+      "baseUrl": "https://www.libertyshoesonline.com/"
+    },
+    {
+      "name": "Lifestyle Stores",
+      "site": "lifestylestores",
+      "hostname": "lifestylestores.com",
+      "baseUrl": "https://www.lifestylestores.com/in/en/"
+    },
+    {
+      "name": "Louis Philippe",
+      "site": "louisphilippe",
+      "hostname": "louisphilippe.abfrl.in",
+      "baseUrl": "https://louisphilippe.abfrl.in/"
+    },
+    {
+      "name": "LoveChild Masaba",
+      "site": "lovechild",
+      "hostname": "lovechild.in",
+      "baseUrl": "https://lovechild.in/"
+    },
+    {
+      "name": "Mamaearth",
+      "site": "mamaearth",
+      "hostname": "mamaearth.in",
+      "baseUrl": "https://mamaearth.in/"
+    },
+    {
+      "name": "Manyavar",
+      "site": "manyavar",
+      "hostname": "manyavar.com",
+      "baseUrl": "https://www.manyavar.com/"
+    },
+    {
+      "name": "Marks & Spencer India",
+      "site": "marksandspencer",
+      "hostname": "marksandspencer.in",
+      "baseUrl": "https://www.marksandspencer.in/"
+    },
+    {
+      "name": "mCaffeine",
+      "site": "mcaffeine",
+      "hostname": "mcaffeine.com",
+      "baseUrl": "https://www.mcaffeine.com/"
+    },
+    {
+      "name": "Meesho",
+      "site": "meesho",
+      "hostname": "meesho.com",
+      "baseUrl": "https://www.meesho.com/"
+    },
+    {
+      "name": "Metro Shoes",
+      "site": "metroshoes",
+      "hostname": "metroshoes.com",
+      "baseUrl": "https://www.metroshoes.com/"
+    },
+    {
+      "name": "Midland Book Shop",
+      "site": "midlandbookshop",
+      "hostname": "midlandbookshop.com",
+      "baseUrl": "https://www.midlandbookshop.com/"
+    },
+    {
+      "name": "Minimalist",
+      "site": "beminimalist",
+      "hostname": "beminimalist.co",
+      "baseUrl": "https://beminimalist.co/"
+    },
+    {
+      "name": "Mivi",
+      "site": "mivi",
+      "hostname": "mivi.in",
+      "baseUrl": "https://www.mivi.in/"
+    },
+    {
+      "name": "Mochi",
+      "site": "mochishoes",
+      "hostname": "mochishoes.com",
+      "baseUrl": "https://www.mochishoes.com/"
+    },
+    {
+      "name": "Mokobara",
+      "site": "mokobara",
+      "hostname": "mokobara.com",
+      "baseUrl": "https://mokobara.com/"
+    },
+    {
+      "name": "Monte Carlo",
+      "site": "montecarlo",
+      "hostname": "montecarlo.in",
+      "baseUrl": "https://www.montecarlo.in/"
+    },
+    {
+      "name": "Mothercare India",
+      "site": "mothercare",
+      "hostname": "mothercare.in",
+      "baseUrl": "https://mothercare.in/"
+    },
+    {
+      "name": "Motorola India",
+      "site": "motorola",
+      "hostname": "motorola.in",
+      "baseUrl": "https://www.motorola.in/"
+    },
+    {
+      "name": "Myntra",
+      "site": "myntra",
+      "hostname": "myntra.com",
+      "baseUrl": "https://www.myntra.com/"
+    },
+    {
+      "name": "Nasher Miles",
+      "site": "nashermiles",
+      "hostname": "nashermiles.com",
+      "baseUrl": "https://nashermiles.com/"
+    },
+    {
+      "name": "Neeman's",
+      "site": "neemans",
+      "hostname": "neemans.com",
+      "baseUrl": "https://neemans.com/"
+    },
+    {
+      "name": "Nestasia",
+      "site": "nestasia",
+      "hostname": "nestasia.in",
+      "baseUrl": "https://nestasia.in/"
+    },
+    {
+      "name": "Nike India",
+      "site": "nike",
+      "hostname": "nike.com",
+      "baseUrl": "https://www.nike.com/in/",
+      "aliases": [
+        "nike.in"
+      ]
+    },
+    {
+      "name": "Nilkamal Homes",
+      "site": "nilkamalhomes",
+      "hostname": "nilkamalhomes.com",
+      "baseUrl": "https://www.nilkamalhomes.com/"
+    },
+    {
+      "name": "Noise",
+      "site": "gonoise",
+      "hostname": "gonoise.com",
+      "baseUrl": "https://www.gonoise.com/"
+    },
+    {
+      "name": "Nothing India",
+      "site": "nothing",
+      "hostname": "in.nothing.tech",
+      "baseUrl": "https://in.nothing.tech/"
+    },
+    {
+      "name": "Nykaa",
+      "site": "nykaa",
+      "hostname": "nykaa.com",
+      "baseUrl": "https://www.nykaa.com/"
+    },
+    {
+      "name": "Nykaa Fashion",
+      "site": "nykaafashion",
+      "hostname": "nykaafashion.com",
+      "baseUrl": "https://www.nykaafashion.com/"
+    },
+    {
+      "name": "Ogaan",
+      "site": "ogaan",
+      "hostname": "ogaan.com",
+      "baseUrl": "https://www.ogaan.com/"
+    },
+    {
+      "name": "Okhai",
+      "site": "okhai",
+      "hostname": "okhai.org",
+      "baseUrl": "https://okhai.org/"
+    },
+    {
+      "name": "OnePlus India",
+      "site": "oneplus",
+      "hostname": "oneplus.in",
+      "baseUrl": "https://www.oneplus.in/"
+    },
+    {
+      "name": "ONLY India",
+      "site": "only",
+      "hostname": "only.in",
+      "baseUrl": "https://www.only.in/"
+    },
+    {
+      "name": "OPPO India",
+      "site": "oppo",
+      "hostname": "oppo.com",
+      "baseUrl": "https://www.oppo.com/in/"
+    },
+    {
+      "name": "PAC Cosmetics",
+      "site": "paccosmetics",
+      "hostname": "paccosmetics.com",
+      "baseUrl": "https://www.paccosmetics.com/"
+    },
+    {
+      "name": "Pantaloons",
+      "site": "pantaloons",
+      "hostname": "pantaloons.com",
+      "baseUrl": "https://www.pantaloons.com/"
+    },
+    {
+      "name": "Pepperfry",
+      "site": "pepperfry",
+      "hostname": "pepperfry.com",
+      "baseUrl": "https://www.pepperfry.com/"
+    },
+    {
+      "name": "Pernia's Pop-Up Shop",
+      "site": "perniaspopupshop",
+      "hostname": "perniaspopupshop.com",
+      "baseUrl": "https://www.perniaspopupshop.com/"
+    },
+    {
+      "name": "Peter England",
+      "site": "peterengland",
+      "hostname": "peterengland.abfrl.in",
+      "baseUrl": "https://peterengland.abfrl.in/"
+    },
+    {
+      "name": "Phool",
+      "site": "phool",
+      "hostname": "phool.co",
+      "baseUrl": "https://phool.co/"
+    },
+    {
+      "name": "Pilgrim",
+      "site": "discoverpilgrim",
+      "hostname": "discoverpilgrim.com",
+      "baseUrl": "https://discoverpilgrim.com/"
+    },
+    {
+      "name": "Plum",
+      "site": "plumgoodness",
+      "hostname": "plumgoodness.com",
+      "baseUrl": "https://plumgoodness.com/"
+    },
+    {
+      "name": "Portronics",
+      "site": "portronics",
+      "hostname": "portronics.com",
+      "baseUrl": "https://www.portronics.com/"
+    },
+    {
+      "name": "Puma India",
+      "site": "puma",
+      "hostname": "in.puma.com",
+      "baseUrl": "https://in.puma.com/"
+    },
+    {
+      "name": "Purplle",
+      "site": "purplle",
+      "hostname": "purplle.com",
+      "baseUrl": "https://www.purplle.com/"
+    },
+    {
+      "name": "Rare Rabbit / The House of Rare",
+      "site": "thehouseofrare",
+      "hostname": "thehouseofrare.com",
+      "baseUrl": "https://thehouseofrare.com/"
+    },
+    {
+      "name": "Rareism",
+      "site": "rareism",
+      "hostname": "rareism.com",
+      "baseUrl": "https://rareism.com/"
+    },
+    {
+      "name": "realme India",
+      "site": "realme",
+      "hostname": "realme.com",
+      "baseUrl": "https://www.realme.com/in/"
+    },
+    {
+      "name": "Red Tape",
+      "site": "redtape",
+      "hostname": "redtape.com",
+      "baseUrl": "https://redtape.com/"
+    },
+    {
+      "name": "Reebok India",
+      "site": "reebok",
+      "hostname": "reebok.abfrl.in",
+      "baseUrl": "https://reebok.abfrl.in/"
+    },
+    {
+      "name": "Reliance Digital",
+      "site": "reliancedigital",
+      "hostname": "reliancedigital.in",
+      "baseUrl": "https://www.reliancedigital.in/"
+    },
+    {
+      "name": "RENÉE Cosmetics",
+      "site": "reneecosmetics",
+      "hostname": "reneecosmetics.in",
+      "baseUrl": "https://www.reneecosmetics.in/"
+    },
+    {
+      "name": "Safari",
+      "site": "safaribags",
+      "hostname": "safaribags.com",
+      "baseUrl": "https://safaribags.com/"
+    },
+    {
+      "name": "Samsung India",
+      "site": "samsung",
+      "hostname": "samsung.com",
+      "baseUrl": "https://www.samsung.com/in/"
+    },
+    {
+      "name": "SapnaOnline",
+      "site": "sapnaonline",
+      "hostname": "sapnaonline.com",
+      "baseUrl": "https://www.sapnaonline.com/"
+    },
+    {
+      "name": "Scooboo",
+      "site": "scooboo",
+      "hostname": "scooboo.in",
+      "baseUrl": "https://scooboo.in/"
+    },
+    {
+      "name": "Sephora India",
+      "site": "sephora",
+      "hostname": "sephora.in",
+      "baseUrl": "https://sephora.in/"
+    },
+    {
+      "name": "Shoppers Stop",
+      "site": "shoppersstop",
+      "hostname": "shoppersstop.com",
+      "baseUrl": "https://www.shoppersstop.com/"
+    },
+    {
+      "name": "Shumee",
+      "site": "shumee",
+      "hostname": "shumee.in",
+      "baseUrl": "https://www.shumee.in/"
+    },
+    {
+      "name": "Skechers India",
+      "site": "skechers",
+      "hostname": "skechers.in",
+      "baseUrl": "https://www.skechers.in/"
+    },
+    {
+      "name": "Skillmatics",
+      "site": "skillmatics",
+      "hostname": "skillmatics.in",
+      "baseUrl": "https://www.skillmatics.in/"
+    },
+    {
+      "name": "Skybags",
+      "site": "skybags",
+      "hostname": "skybags.co.in",
+      "baseUrl": "https://skybags.co.in/"
+    },
+    {
+      "name": "Sleepyhead",
+      "site": "mysleepyhead",
+      "hostname": "mysleepyhead.com",
+      "baseUrl": "https://mysleepyhead.com/"
+    },
+    {
+      "name": "Smartivity",
+      "site": "smartivity",
+      "hostname": "smartivity.in",
+      "baseUrl": "https://www.smartivity.in/"
+    },
+    {
+      "name": "Smytten",
+      "site": "smytten",
+      "hostname": "smytten.com",
+      "baseUrl": "https://smytten.com/"
+    },
+    {
+      "name": "SNITCH",
+      "site": "snitch",
+      "hostname": "snitch.co.in",
+      "baseUrl": "https://www.snitch.co.in/",
+      "aliases": [
+        "snitch.com"
+      ]
+    },
+    {
+      "name": "Soch",
+      "site": "soch",
+      "hostname": "soch.com",
+      "baseUrl": "https://www.soch.com/in/"
+    },
+    {
+      "name": "Specsmakers",
+      "site": "specsmakers",
+      "hostname": "specsmakers.in",
+      "baseUrl": "https://www.specsmakers.in/"
+    },
+    {
+      "name": "Stationery Pal",
+      "site": "stationerypal",
+      "hostname": "stationerypal.com",
+      "baseUrl": "https://stationerypal.com/"
+    },
+    {
+      "name": "Stuffcool",
+      "site": "stuffcool",
+      "hostname": "stuffcool.com",
+      "baseUrl": "https://www.stuffcool.com/"
+    },
+    {
+      "name": "SUGAR Cosmetics",
+      "site": "sugarcosmetics",
+      "hostname": "sugarcosmetics.com",
+      "baseUrl": "https://www.sugarcosmetics.com/"
+    },
+    {
+      "name": "SunriseClick / Yonex India Distributor",
+      "site": "sunriseclick",
+      "hostname": "sunriseclick.com",
+      "baseUrl": "https://www.sunriseclick.com/"
+    },
+    {
+      "name": "Superdry India",
+      "site": "superdry",
+      "hostname": "superdry.in",
+      "baseUrl": "https://superdry.in/"
+    },
+    {
+      "name": "Supertails",
+      "site": "supertails",
+      "hostname": "supertails.com",
+      "baseUrl": "https://supertails.com/"
+    },
+    {
+      "name": "Tata CLiQ",
+      "site": "tatacliq",
+      "hostname": "tatacliq.com",
+      "baseUrl": "https://www.tatacliq.com/"
+    },
+    {
+      "name": "Tata CLiQ Luxury",
+      "site": "luxury",
+      "hostname": "luxury.tatacliq.com",
+      "baseUrl": "https://luxury.tatacliq.com/"
+    },
+    {
+      "name": "The Bombay Store",
+      "site": "thebombaystore",
+      "hostname": "thebombaystore.com",
+      "baseUrl": "https://thebombaystore.com/"
+    },
+    {
+      "name": "The Collective",
+      "site": "thecollective",
+      "hostname": "thecollective.in",
+      "baseUrl": "https://www.thecollective.in/"
+    },
+    {
+      "name": "The Derma Co",
+      "site": "thedermaco",
+      "hostname": "thedermaco.com",
+      "baseUrl": "https://thedermaco.com/"
+    },
+    {
+      "name": "The June Shop",
+      "site": "thejuneshop",
+      "hostname": "thejuneshop.com",
+      "baseUrl": "https://thejuneshop.com/"
+    },
+    {
+      "name": "The Messy Corner",
+      "site": "themessycorner",
+      "hostname": "themessycorner.in",
+      "baseUrl": "https://www.themessycorner.in/"
+    },
+    {
+      "name": "The Souled Store",
+      "site": "thesouledstore",
+      "hostname": "thesouledstore.com",
+      "baseUrl": "https://www.thesouledstore.com/"
+    },
+    {
+      "name": "The White Teak Company",
+      "site": "whiteteak",
+      "hostname": "whiteteak.com",
+      "baseUrl": "https://www.whiteteak.com/"
+    },
+    {
+      "name": "Tira",
+      "site": "tirabeauty",
+      "hostname": "tirabeauty.com",
+      "baseUrl": "https://www.tirabeauty.com/"
+    },
+    {
+      "name": "Titan Eye+",
+      "site": "titaneyeplus",
+      "hostname": "titaneyeplus.com",
+      "baseUrl": "https://www.titaneyeplus.com/"
+    },
+    {
+      "name": "UNIQLO India",
+      "site": "uniqlo",
+      "hostname": "uniqlo.com",
+      "baseUrl": "https://www.uniqlo.com/in/en/"
+    },
+    {
+      "name": "United Colors of Benetton India",
+      "site": "benetton",
+      "hostname": "in.benetton.com",
+      "baseUrl": "https://in.benetton.com/"
+    },
+    {
+      "name": "Uppercase",
+      "site": "uppercase",
+      "hostname": "uppercase.co.in",
+      "baseUrl": "https://uppercase.co.in/"
+    },
+    {
+      "name": "Urban Ladder",
+      "site": "urbanladder",
+      "hostname": "urbanladder.com",
+      "baseUrl": "https://www.urbanladder.com/"
+    },
+    {
+      "name": "Urban Monkey",
+      "site": "urbanmonkey",
+      "hostname": "urbanmonkey.com",
+      "baseUrl": "https://www.urbanmonkey.com/"
+    },
+    {
+      "name": "Vaaree",
+      "site": "vaaree",
+      "hostname": "vaaree.com",
+      "baseUrl": "https://vaaree.com/"
+    },
+    {
+      "name": "Van Heusen",
+      "site": "vanheusenindia",
+      "hostname": "vanheusenindia.com",
+      "baseUrl": "https://vanheusenindia.abfrl.in/",
+      "aliases": [
+        "vanheusenindia.abfrl.in"
+      ]
+    },
+    {
+      "name": "Vero Moda India",
+      "site": "veromoda",
+      "hostname": "veromoda.in",
+      "baseUrl": "https://www.veromoda.in/"
+    },
+    {
+      "name": "Vijay Sales",
+      "site": "vijaysales",
+      "hostname": "vijaysales.com",
+      "baseUrl": "https://www.vijaysales.com/"
+    },
+    {
+      "name": "VIP Bags",
+      "site": "vipbags",
+      "hostname": "vipbags.com",
+      "baseUrl": "https://www.vipbags.com/"
+    },
+    {
+      "name": "vivo India",
+      "site": "vivo",
+      "hostname": "vivo.com",
+      "baseUrl": "https://www.vivo.com/in/"
+    },
+    {
+      "name": "W for Woman",
+      "site": "wforwoman",
+      "hostname": "wforwoman.com",
+      "baseUrl": "https://wforwoman.com/"
+    },
+    {
+      "name": "Wakefit",
+      "site": "wakefit",
+      "hostname": "wakefit.co",
+      "baseUrl": "https://www.wakefit.co/"
+    },
+    {
+      "name": "Westside",
+      "site": "westside",
+      "hostname": "westside.com",
+      "baseUrl": "https://www.westside.com/"
+    },
+    {
+      "name": "Wiggles",
+      "site": "wiggles",
+      "hostname": "wiggles.in",
+      "baseUrl": "https://www.wiggles.in/"
+    },
+    {
+      "name": "Wildcraft",
+      "site": "wildcraft",
+      "hostname": "wildcraft.com",
+      "baseUrl": "https://wildcraft.com/"
+    },
+    {
+      "name": "WoodenStreet",
+      "site": "woodenstreet",
+      "hostname": "woodenstreet.com",
+      "baseUrl": "https://www.woodenstreet.com/"
+    },
+    {
+      "name": "Woodland",
+      "site": "woodlandworldwide",
+      "hostname": "woodlandworldwide.com",
+      "baseUrl": "https://www.woodlandworldwide.com/"
+    },
+    {
+      "name": "Xiaomi India",
+      "site": "mi",
+      "hostname": "mi.com",
+      "baseUrl": "https://www.mi.com/in/"
+    },
+    {
+      "name": "Yonex",
+      "site": "yonex",
+      "hostname": "yonex.com",
+      "baseUrl": "https://www.yonex.com/"
+    },
+    {
+      "name": "Zara India",
+      "site": "zara",
+      "hostname": "zara.com",
+      "baseUrl": "https://www.zara.com/in/"
+    },
+    {
+      "name": "Zebronics",
+      "site": "zebronics",
+      "hostname": "zebronics.com",
+      "baseUrl": "https://zebronics.com/"
+    },
+    {
+      "name": "Zigly",
+      "site": "zigly",
+      "hostname": "zigly.com",
+      "baseUrl": "https://zigly.com/"
+    },
+    {
+      "name": "Zouk",
+      "site": "zouk",
+      "hostname": "zouk.co.in",
+      "baseUrl": "https://zouk.co.in/"
+    },
+    {
+      "name": "Da Milano",
+      "site": "damilano",
+      "hostname": "damilano.com",
+      "baseUrl": "https://www.damilano.com/"
+    },
+    {
+      "name": "Hidesign",
+      "site": "hidesign",
+      "hostname": "hidesign.com",
+      "baseUrl": "https://hidesign.com/"
+    },
+    {
+      "name": "TUMI India",
+      "site": "tumi",
+      "hostname": "tumi.in",
+      "baseUrl": "https://tumi.in/"
+    },
+    {
+      "name": "Charles & Keith India",
+      "site": "charleskeith",
+      "hostname": "charleskeith.in",
+      "baseUrl": "https://charleskeith.in/"
+    },
+    {
+      "name": "ALDO India",
+      "site": "aldo",
+      "hostname": "aldoshoes.in",
+      "baseUrl": "https://aldoshoes.in/"
+    },
+    {
+      "name": "Armani Exchange India",
+      "site": "armaniexchange",
+      "hostname": "armaniexchange.in",
+      "baseUrl": "https://armaniexchange.in/"
+    },
+    {
+      "name": "Superkicks",
+      "site": "superkicks",
+      "hostname": "superkicks.in",
+      "baseUrl": "https://superkicks.in/"
+    },
+    {
+      "name": "VegNonVeg",
+      "site": "vegnonveg",
+      "hostname": "vegnonveg.com",
+      "baseUrl": "https://vegnonveg.com/"
+    },
+    {
+      "name": "Foot Locker India",
+      "site": "footlocker",
+      "hostname": "footlocker.co.in",
+      "baseUrl": "https://www.footlocker.co.in/"
+    },
+    {
+      "name": "Titan",
+      "site": "titan",
+      "hostname": "titan.co.in",
+      "baseUrl": "https://www.titan.co.in/"
+    },
+    {
+      "name": "Fastrack",
+      "site": "fastrack",
+      "hostname": "fastrack.in",
+      "baseUrl": "https://www.fastrack.in/"
+    },
+    {
+      "name": "Sonata",
+      "site": "sonata",
+      "hostname": "sonatawatches.in",
+      "baseUrl": "https://www.sonatawatches.in/"
+    },
+    {
+      "name": "HMT Watches",
+      "site": "hmtwatches",
+      "hostname": "hmtwatches.in",
+      "baseUrl": "https://www.hmtwatches.in/"
+    },
+    {
+      "name": "Bangalore Watch Company",
+      "site": "bangalorewatchco",
+      "hostname": "bangalorewatchco.in",
+      "baseUrl": "https://bangalorewatchco.in/"
+    },
+    {
+      "name": "Jaipur Watch Company",
+      "site": "jaipurwatch",
+      "hostname": "jaipur.watch",
+      "baseUrl": "https://jaipur.watch/"
+    },
+    {
+      "name": "Delhi Watch Company",
+      "site": "delhiwatchcompany",
+      "hostname": "delhiwatchcompany.com",
+      "baseUrl": "https://delhiwatchcompany.com/"
+    },
+    {
+      "name": "Maxima",
+      "site": "maximawatches",
+      "hostname": "maximawatches.com",
+      "baseUrl": "https://www.maximawatches.com/"
+    },
+    {
+      "name": "Ajwain",
+      "site": "ajwain",
+      "hostname": "ajwa.in",
+      "baseUrl": "https://ajwa.in/"
+    },
+    {
+      "name": "Sylvi",
+      "site": "sylvi",
+      "hostname": "sylvi.in",
+      "baseUrl": "https://sylvi.in/"
+    },
+    {
+      "name": "Ethos Watches",
+      "site": "ethoswatches",
+      "hostname": "ethoswatches.com",
+      "baseUrl": "https://www.ethoswatches.com/"
+    },
+    {
+      "name": "Kapoor Watch Co.",
+      "site": "kapoorwatch",
+      "hostname": "kapoorwatch.com",
+      "baseUrl": "https://www.kapoorwatch.com/"
+    },
+    {
+      "name": "Helios Watch Store",
+      "site": "helioswatchstore",
+      "hostname": "helioswatchstore.com",
+      "baseUrl": "https://www.helioswatchstore.com/"
+    },
+    {
+      "name": "Just In Time",
+      "site": "justintime",
+      "hostname": "justintime.in",
+      "baseUrl": "https://justintime.in/"
+    },
+    {
+      "name": "Ugaoo",
+      "site": "ugaoo",
+      "hostname": "ugaoo.com",
+      "baseUrl": "https://www.ugaoo.com/"
+    },
+    {
+      "name": "Bridlen",
+      "site": "bridlen",
+      "hostname": "bridlen.com",
+      "baseUrl": "https://bridlen.com/"
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MyCart Price Tracker</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main>
+      <header class="popup-header">
+        <div class="brand-mark" aria-hidden="true">M</div>
+        <div>
+          <strong>MyCart</strong>
+          <span>Price tracker</span>
+        </div>
+        <span class="store-count" id="store-count"></span>
+      </header>
+
+      <section class="current-store" aria-labelledby="current-store-title">
+        <div class="store-icon" aria-hidden="true">
+          <span id="store-initial">?</span>
+          <img id="store-icon-image" alt="" width="26" height="26" hidden />
+        </div>
+        <div class="store-copy">
+          <h1 id="current-store-title">Checking this page</h1>
+          <p id="current-store-domain">Please wait…</p>
+        </div>
+      </section>
+
+      <div class="notice" id="notice" role="status" aria-live="polite">
+        Checking whether this website is supported.
+      </div>
+
+      <button class="primary-button" id="track-product" type="button" disabled>
+        <span class="button-spinner" id="button-spinner" hidden></span>
+        <span id="track-label">Track this product</span>
+      </button>
+
+      <section class="product-result" id="product-result" hidden aria-live="polite">
+        <img id="product-image" alt="" />
+        <div>
+          <span>Price scraped and saved</span>
+          <strong id="product-name"></strong>
+          <b id="product-price"></b>
+        </div>
+      </section>
+
+      <nav class="popup-actions" aria-label="MyCart links">
+        <button id="open-app" type="button">Open MyCart</button>
+        <button id="view-supported" type="button">Supported websites</button>
+        <button id="open-options" type="button" aria-label="Open extension settings">Settings</button>
+      </nav>
+
+      <p class="app-address" id="app-address"></p>
+    </main>
+    <script src="supported-sites.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

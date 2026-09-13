@@ -7,19 +7,28 @@ import { AnimatePresence, motion } from "motion/react";
 import {
   Card,
   CardContent,
-  CardHeader,
 } from "@/components/ui/card";
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import {
+  RefreshCw,
+  LineChart,
+  Trash2,
+  Loader2,
+  Check,
+  BadgeCheck,
+  TrendingDown,
+  TrendingUp,
+  Eraser,
+} from "lucide-react";
 
 export const description = "A linear area chart";
 
 const chartConfig = {
-  desktop: {
+  price: {
     label: "Price",
     color: "hsl(var(--chart-1))",
   },
@@ -32,10 +41,16 @@ const ItemCard = ({
   isSelectMode,
   isSelected,
   onToggleSelect,
+  onRefreshStatus,
 }) => {
   const [data, setData] = useState([]);
   const [graph, setGraph] = useState(false);
   const [isScraping, setIsScraping] = useState(false);
+  const [isClearingHistory, setIsClearingHistory] = useState(false);
+  const hasSameHighLowPrice =
+    Number(item.max_price) === Number(item.min_price);
+  const isCurrentHighPrice =
+    !hasSameHighLowPrice && Number(item.current_price) === Number(item.max_price);
 
   const fetchdata = async (index) => {
     await fetch("/api/deleterecord", {
@@ -66,19 +81,67 @@ const ItemCard = ({
   };
 
   const handleScrape = async () => {
+    const refreshJob = {
+      id: `refresh-product-${item.transid}-${Date.now()}`,
+      label: `${item.website} · ${item.name}`,
+    };
+    onRefreshStatus?.({
+      ...refreshJob,
+      status: "processing",
+      detail: "Searching for the current price…",
+    });
     setIsScraping(true);
     try {
       const res = await fetch("/api/scrapeitem", {
         method: "POST",
         body: JSON.stringify({ transid: item.transid, link: item.link, selectedOption }),
       });
-      const data = await res.json();
-      if (Array.isArray(data)) setitemdata(data);
-      else console.error("scrapeitem error:", data?.error);
+      const result = await res.json();
+      if (!res.ok || !Array.isArray(result)) {
+        throw new Error(result?.error || "No current price data was returned.");
+      }
+      setitemdata(result);
+      onRefreshStatus?.({
+        ...refreshJob,
+        status: "processed",
+        detail: "Current price data found",
+      });
     } catch (err) {
       console.error("Error refreshing item price:", err);
+      onRefreshStatus?.({
+        ...refreshJob,
+        status: "error",
+        detail: "No updated data was returned",
+        error: err?.message || "The current price could not be found.",
+      });
     } finally {
       setIsScraping(false);
+    }
+  };
+
+  const handleClearHistory = async () => {
+    const confirmed = window.confirm(
+      `Clear older price history for “${item.name}”? The latest price will be kept.`
+    );
+    if (!confirmed) return;
+
+    setIsClearingHistory(true);
+    try {
+      const response = await fetch("/api/history/clear", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids: [item.transid], selectedOption }),
+      });
+      const result = await response.json();
+      if (!response.ok || result?.error) {
+        throw new Error(result?.error || "Could not clear price history.");
+      }
+      setitemdata(result.items || []);
+      if (graph) await fetchgraphdata(item.transid);
+    } catch (error) {
+      console.error("Error clearing item price history:", error);
+    } finally {
+      setIsClearingHistory(false);
     }
   };
 
@@ -101,9 +164,7 @@ const ItemCard = ({
           <div className="item-checkbox">
             <div className={`checkbox${isSelected ? " checkbox--checked" : ""}`}>
               {isSelected && (
-                <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M2 6l3 3 5-5" />
-                </svg>
+                <Check size={10} color="white" strokeWidth={2.5} />
               )}
             </div>
           </div>
@@ -112,6 +173,7 @@ const ItemCard = ({
         {/* Image */}
         <div className="item-image">
           <motion.div
+            className="item-image-frame"
             whileHover={{ scale: 1.06 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
           >
@@ -119,8 +181,8 @@ const ItemCard = ({
               className="image fixsize"
               alt={item.name}
               src={item.image}
-              height={110}
-              width={96}
+              fill
+              sizes="(max-width: 600px) 68px, 96px"
             />
           </motion.div>
         </div>
@@ -145,6 +207,34 @@ const ItemCard = ({
             <span className="high-price">↑ ₹{item.max_price}</span>
             <span className="low-price">↓ ₹{item.min_price}</span>
           </div>
+
+          {(hasSameHighLowPrice || item.is_lowest_price || item.is_price_drop || isCurrentHighPrice) && (
+            <div className="price-badges" aria-label="Price indicators">
+              {hasSameHighLowPrice ? (
+                <span className="price-badge price-badge--same" title="Highest and lowest recorded prices are the same">
+                  <BadgeCheck size={11} strokeWidth={2.4} />
+                  Same
+                </span>
+              ) : item.is_lowest_price && (
+                <span className="price-badge price-badge--lowest" title="Current price is the lowest recorded price">
+                  <BadgeCheck size={11} strokeWidth={2.4} />
+                  Lowest
+                </span>
+              )}
+              {item.is_price_drop && (
+                <span className="price-badge price-badge--drop" title="Current price is lower than the previous price">
+                  <TrendingDown size={11} strokeWidth={2.4} />
+                  Dropped
+                </span>
+              )}
+              {isCurrentHighPrice && (
+                <span className="price-badge price-badge--high" title="Current price is the highest recorded price">
+                  <TrendingUp size={11} strokeWidth={2.4} />
+                  High
+                </span>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Actions */}
@@ -161,14 +251,9 @@ const ItemCard = ({
                 title="Refresh this item's price"
               >
                 {isScraping ? (
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" style={{ animation: "spin 0.8s linear infinite" }}>
-                    <circle cx="12" cy="12" r="9" strokeDasharray="28 56" />
-                  </svg>
+                  <Loader2 size={13} style={{ animation: "spin 0.8s linear infinite" }} />
                 ) : (
-                  <svg width="13" height="13" viewBox="0 0 15 15" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M13.5 7.5a6 6 0 1 1-1.5-4"/>
-                    <path d="M12 1v3.5H8.5"/>
-                  </svg>
+                  <RefreshCw size={13} />
                 )}
               </motion.button>
 
@@ -179,9 +264,21 @@ const ItemCard = ({
                 whileTap={{ scale: 0.88 }}
                 title={graph ? "Hide chart" : "Show price history"}
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                </svg>
+                <LineChart size={14} />
+              </motion.button>
+
+              <motion.button
+                className="history-clear-btn"
+                onClick={handleClearHistory}
+                whileTap={{ scale: 0.88 }}
+                disabled={isClearingHistory}
+                title="Clear older price history"
+              >
+                {isClearingHistory ? (
+                  <Loader2 size={13} style={{ animation: "spin 0.8s linear infinite" }} />
+                ) : (
+                  <Eraser size={13} />
+                )}
               </motion.button>
 
               {/* Delete */}
@@ -191,9 +288,7 @@ const ItemCard = ({
                 whileTap={{ scale: 0.88 }}
                 title="Remove item"
               >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>
-                </svg>
+                <Trash2 size={13} />
               </motion.button>
             </div>
           )}
@@ -211,32 +306,50 @@ const ItemCard = ({
             style={{ transformOrigin: "top" }}
           >
             <Card className="chartbg">
-              <CardHeader style={{ padding: "8px 16px 0" }} />
-              <CardContent style={{ padding: "0 16px 12px" }}>
+              <CardContent className="chart-card-content">
                 <ChartContainer config={chartConfig} className="areachartsize">
                   <AreaChart
                     accessibilityLayer
                     data={data}
-                    margin={{ left: 0, right: 0 }}
+                    margin={{ left: 2, right: 8, top: 8, bottom: 0 }}
                   >
-                    <CartesianGrid vertical={false} />
+                    <defs>
+                      <linearGradient id={`priceFill-${item.transid}`} x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="var(--color-price)" stopOpacity={0.35} />
+                        <stop offset="95%" stopColor="var(--color-price)" stopOpacity={0.04} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid vertical={false} strokeDasharray="3 3" />
                     <XAxis
                       dataKey="date"
                       tickLine={false}
                       axisLine={false}
                       tickMargin={8}
+                      minTickGap={24}
                     />
                     <ChartTooltip
                       cursor={false}
-                      content={<ChartTooltipContent indicator="line" />}
+                      content={
+                        <ChartTooltipContent
+                          indicator="line"
+                          labelFormatter={(value) => value}
+                          formatter={(value) => (
+                            <span className="font-mono font-medium tabular-nums text-foreground">
+                              ₹{Number(value).toLocaleString("en-IN")}
+                            </span>
+                          )}
+                        />
+                      }
                     />
                     <Area
                       dataKey="price"
-                      type="linear"
-                      fill="var(--color-desktop)"
-                      fillOpacity={0.3}
-                      stroke="var(--color-desktop)"
+                      name="price"
+                      type="monotone"
+                      fill={`url(#priceFill-${item.transid})`}
+                      stroke="var(--color-price)"
                       strokeWidth={2}
+                      dot={false}
+                      activeDot={{ r: 3 }}
                     />
                   </AreaChart>
                 </ChartContainer>

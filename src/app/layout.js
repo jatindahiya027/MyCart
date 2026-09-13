@@ -1,20 +1,28 @@
 import "./cronjob"
-import localFont from "next/font/local";
+import "./lib/database"
+import { Rubik, Figtree, Fira_Code } from "next/font/google";
 import "./globals.css";
-import { Inter } from "next/font/google";
 
+const rubik = Rubik({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--rubik-font",
+  display: "swap",
+});
 
-const inter = Inter({ subsets: ["latin"] });
-// const geistSans = localFont({
-//   src: "./fonts/GeistVF.woff",
-//   variable: "--font-geist-sans",
-//   weight: "100 900",
-// });
-// const geistMono = localFont({
-//   src: "./fonts/GeistMonoVF.woff",
-//   variable: "--font-geist-mono",
-//   weight: "100 900",
-// });
+const figtree = Figtree({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--figtree-font",
+  display: "swap",
+});
+
+const firaCode = Fira_Code({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--fira-font",
+  display: "swap",
+});
 
 export const metadata = {
   title: "MyCart",
@@ -23,12 +31,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className={inter.className}
-      >
-        {children}
-      </body>
+    <html lang="en" className={`${rubik.variable} ${figtree.variable} ${firaCode.variable}`}>
+      <body>{children}</body>
     </html>
   );
 }

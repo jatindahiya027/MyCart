@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MyCart extension settings</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main>
+      <h1>MyCart connection</h1>
+      <p>Enter the address where this browser can reach your self-hosted MyCart app.</p>
+      <label for="app-url">App URL</label>
+      <input id="app-url" type="url" placeholder="http://localhost:3027" />
+      <div class="actions">
+        <button id="save" type="button">Save</button>
+        <span id="status" role="status"></span>
+      </div>
+    </main>
+    <script src="options.js"></script>
+  </body>
+</html>
